@@ -3,20 +3,38 @@ using Codice.CM.Common;
 using UnityEngine;
 using UnityEngine.UI;
 using NP_UI;
+using PlasticGui;
 
 // This is a static class, meaning you can call its methods directly without creating an instance.
 public static class UIMenuGenerator
 {
-    // --- Public Enums (can be placed outside this class if desired, but kept here for self-containment) ---
+    [Flags]
     public enum MenuAlignment
     {
-        TopLeft, TopCenter, TopRight,
-        BottomLeft, BottomCenter, BottomRight,
-        LeftSide, RightSide, TopPanel, BottomPanel,
-        Center,
-        Stretch,
-        Left,
-        Right
+        // 0 is often reserved for None, but can be omitted if you have no "None" state
+    
+        // --- INDEPENDENT FLAGS (MUST be powers of two) ---
+        Top = 1 << 0,       // 1
+        Bottom = 1 << 1,    // 2
+        Left = 1 << 2,      // 4  <- This is now a unique flag
+        Right = 1 << 3,     // 8
+
+        LeftSide = 1 << 4,  // 16
+        RightSide = 1 << 5, // 32
+        TopPanel = 1 << 6,  // 64 <- This is now a unique flag
+        BottomPanel = 1 << 7, // 128
+    
+        Center = 1 << 8,    // 256
+        Stretch = 1 << 9,   // 512
+    
+        // --- COMBINATION FLAGS (Combine the independent ones using the OR operator |) ---
+        TopLeft = Top | Left,             // (1 | 4) = 5
+        TopCenter = Top | Center,         // (1 | 256) = 257
+        TopRight = Top | Right,           // (1 | 8) = 9
+    
+        BottomLeft = Bottom | Left,       // (2 | 4) = 6
+        BottomCenter = Bottom | Center,   // (2 | 256) = 258 <- This is now a unique combination
+        BottomRight = Bottom | Right,     // (2 | 8) = 10
     }
 
     public enum GridLayoutType
@@ -163,7 +181,23 @@ public static class UIMenuGenerator
 
             if (isSubclassOfTabsMenu)
             {
-                menuType = MenuType.Tabs;
+                switch (config.Alignment)
+                {
+                    case MenuAlignment.Left:
+                    case MenuAlignment.LeftSide:
+                        menuType = MenuType.TabsLeft;
+                        break;
+                    case MenuAlignment.Right:
+                    case MenuAlignment.RightSide:
+                        menuType = MenuType.TabsRight;
+                        break;
+                    case MenuAlignment.TopPanel:
+                        menuType = MenuType.TabsUp;
+                        break;
+                    case MenuAlignment.BottomPanel:
+                        menuType = MenuType.TabsDown;
+                        break;
+                }
             }
         }        
         

@@ -147,10 +147,19 @@ public class NP_MenusManager :  Singleton<NP_MenusManager>
                 {
                     path = @"Menus\EmptyFormBottomLayout";
                 }
-
                 break;
-            case MenuType.Tabs:
-                path = @"Menus\EmptyTabsMenu";
+            
+            case MenuType.TabsUp:
+                path = @"Menus\EmptyTabsMenuUp";
+                break;
+            case MenuType.TabsDown:
+                path = @"Menus\EmptyTabsMenuBottom";
+                break;
+            case MenuType.TabsLeft:
+                path = @"Menus\EmptyTabsMenuLeft";
+                break;
+            case MenuType.TabsRight:
+                path = @"Menus\EmptyTabsMenuRight";
                 break;
             
             default:

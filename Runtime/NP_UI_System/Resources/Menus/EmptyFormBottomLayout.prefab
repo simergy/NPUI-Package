@@ -689,7 +689,7 @@ MonoBehaviour:
     IsAlwaysOn: 0
     MenuType: 0
     Alignment: 0
-    ScreenCoveragePercent: 0
+    ScreenCoveragePercent: 0.01
     LayoutType: 0
     ItemCellSize: {x: 0, y: 0}
     ItemSpacing: {x: 0, y: 0}
@@ -700,7 +700,7 @@ MonoBehaviour:
       m_Bottom: 0
     GridChildAlignment: 0
     GridLayoutConstraint: 0
-    GridLayoutConstraintCount: 0
+    GridLayoutConstraintCount: 1
     MenuBackgroundColor: {r: 0, g: 0, b: 0, a: 0}
     ViewportBackgroundColor: {r: 0, g: 0, b: 0, a: 0}
     ItemBackgroundColor: {r: 0, g: 0, b: 0, a: 0}

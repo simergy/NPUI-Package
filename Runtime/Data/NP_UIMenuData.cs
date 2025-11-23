@@ -36,7 +36,10 @@ using UnityEngine.Events;
     {
         Regular,
         Form,
-        Tabs
+        TabsUp,
+        TabsLeft,
+        TabsRight,
+        TabsDown
     }
 
     public enum MenuFormType
@@ -209,6 +212,13 @@ using UnityEngine.Events;
         public TabData (Type typeOfMenu, string textButton, UnityAction onClick)
         {
             Text = textButton;
+            TypeOfMenu = typeOfMenu;
+            ClickAction = onClick;
+        }
+        
+        public TabData (Type typeOfMenu, UnityEngine.Sprite menuIcon, UnityAction onClick)
+        {
+            MenuIcon = menuIcon;
             TypeOfMenu = typeOfMenu;
             ClickAction = onClick;
         }

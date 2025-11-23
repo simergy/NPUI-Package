@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.UIElements;
 
 namespace NP_UI
@@ -42,8 +43,40 @@ namespace NP_UI
                         tabData.NpMenuData.ID = tabMenuData.ID;
                     }
                     NP_Button npButton = dataElement.GetUIElement() as NP_Button;
-                    npButton.SetText(tabData.NpMenuData.MenuName);
+                    npButton.SetText(tabData.Text);
                     npButton.SetOnClick(()=>SelectTab(tabData.NpMenuData));
+
+                    bool isLeft = npMenu.menuData.Alignment is UIMenuGenerator.MenuAlignment.Left or UIMenuGenerator.MenuAlignment.LeftSide;
+                    bool isRight = npMenu.menuData.Alignment is UIMenuGenerator.MenuAlignment.Right or UIMenuGenerator.MenuAlignment.RightSide;
+                    bool isSide = isLeft || isRight;
+                    
+                    if (isSide && tabData.MenuIcon == null)
+                    {
+                        RectTransform rectTransform = npButton.GetComponent<RectTransform>();
+                        if (rectTransform != null)
+                        {
+                            int rotateDirection = 0;
+                            if (isLeft)
+                            {
+                                rotateDirection = -1;
+                            }
+                            else
+                            {
+                                rotateDirection = 1;
+                            }
+                        
+                            rectTransform.transform.eulerAngles = new Vector3(rectTransform.rotation.eulerAngles.x,
+                                rectTransform.rotation.eulerAngles.y, 90 * rotateDirection);
+                        }
+                    }
+                    else if (isSide && tabData.MenuIcon!= null)
+                    {
+                         npButton.SetBackgroundImage(tabData.MenuIcon);
+                         npButton.GetComponent<RectTransform>().sizeDelta = new Vector2(100,100);
+                         AspectRatioFitter aspectRatioFitter = npButton.gameObject.AddComponent<AspectRatioFitter>();
+                         aspectRatioFitter.aspectMode = AspectRatioFitter.AspectMode.HeightControlsWidth;
+                    }
+
                     if (tabData.ClickAction != null)
                     {
                         npButton.AddOnClick(tabData.ClickAction);
@@ -58,6 +91,10 @@ namespace NP_UI
         {
             tabsMenuList = new List<MenuData>();
             tabsMenu = GetComponentInChildren<NP_TabsMenu>();
+            if (tabsMenu == null)
+            {
+                tabsMenu  = gameObject.GetComponent<NP_TabsMenu>();
+            }
         }
 
         protected void AddTab(MenuData menuData)

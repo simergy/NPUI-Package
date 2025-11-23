@@ -143,8 +143,18 @@ public class NP_MenusManager :  Singleton<NP_MenusManager>
                 break;
             case MenuType.Form:
                 path = @"Menus\EmptyForm";
-                if(menuFormType == MenuFormType.BottomErrorsForm)
+                if (menuFormType == MenuFormType.BottomErrorsForm)
+                {
                     path = @"Menus\EmptyFormBottomLayout";
+                }
+
+                break;
+            case MenuType.Tabs:
+                path = @"Menus\EmptyTabsMenu";
+                break;
+            
+            default:
+                path = @"Menus\EmptyMenu";
                 break;
         }
 

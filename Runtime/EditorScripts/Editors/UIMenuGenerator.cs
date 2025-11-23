@@ -1,3 +1,5 @@
+using System;
+using Codice.CM.Common;
 using UnityEngine;
 using UnityEngine.UI;
 using NP_UI;
@@ -142,25 +144,28 @@ public static class UIMenuGenerator
 
     private static GameObject CreateNewRootMenuGameObject(MenuData config)
     {
-        bool isSubclassOfNPGeneric = config.ItemType.Type.IsSubclassOf(typeof(NpGenericMenu));
-        bool isSubclassOfFormMenu = config.ItemType.Type.IsSubclassOf(typeof(FormMenu));
+        Type type = config.ItemType.Type;
+        
+        bool isSubclassOfNPGeneric = type.IsSubclassOf(typeof(NpGenericMenu));
+        bool isSubclassOfFormMenu = type.IsSubclassOf(typeof(FormMenu));
+        bool isSubclassOfTabsMenu = type.IsSubclassOf(typeof(TabsMenu));
 
         MenuType menuType = MenuType.Regular;
-        
-        if (isSubclassOfFormMenu)
-        {
-            menuType = MenuType.Form;
-            //if (config.MenuType.)
-            {
-                
-            }
-        }
 
-        if (isSubclassOfNPGeneric  && !isSubclassOfFormMenu)
+        if (isSubclassOfNPGeneric)
         {
             menuType = MenuType.Regular;
-        }
-        
+
+            if (isSubclassOfFormMenu)
+            {
+                menuType = MenuType.Form;
+            }
+
+            if (isSubclassOfTabsMenu)
+            {
+                menuType = MenuType.Tabs;
+            }
+        }        
         
         return NP_MenusManager.Instance.GetNewNpMenu(config, menuType).gameObject;
     }

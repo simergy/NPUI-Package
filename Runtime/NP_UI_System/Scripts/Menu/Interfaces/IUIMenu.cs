@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -16,7 +17,7 @@ namespace NP_UI
         public NP_Menu npMenu;
         protected ElemetsIDSystem _elementsSystem;
         protected List<GenericUIData> genericUIDatas = new List<GenericUIData>();
-
+        private UIAnimator uiAnimator;
 
         public virtual void CloseMenu()
         {
@@ -30,7 +31,6 @@ namespace NP_UI
             MenuGameObject.SetActive(true);
         }
 
-
         public void Awake()
         {
             InitialisationHandler();
@@ -38,7 +38,16 @@ namespace NP_UI
 
         private void InitialisationHandler()
         {
-            npMenu = GetComponent<NP_Menu>();
+            uiAnimator = gameObject.GetComponent<UIAnimator>();
+            if (uiAnimator == null)
+            {
+                uiAnimator = gameObject.AddComponent<UIAnimator>();
+            }
+
+            if (npMenu == null)
+            {
+                npMenu = GetComponent<NP_Menu>();
+            }
             SetID();
             if (npMenu != null)
             {
@@ -70,19 +79,54 @@ namespace NP_UI
 
         protected void SetEscapeButtonAction(UnityAction unityAction)
         {
-            npMenu.EscapeButton.onClick.RemoveAllListeners();
-            npMenu.EscapeButton.onClick.AddListener(unityAction);
+            if (npMenu.EscapeButton)
+            {
+                npMenu.EscapeButton.onClick.RemoveAllListeners();
+                npMenu.EscapeButton.onClick.AddListener(unityAction);
+            }
+
         }
         
-        protected void ClearUI(bool clearData = true)
+        protected void SetEscapeButtonTexture(Texture texture)
+        {
+            if (npMenu.EscapeButton)
+            {
+                npMenu.EscapeButton.GetComponent<RawImage>().texture = texture;
+            }
+        }
+
+        protected void RotateEscapeButton(Vector2 rotation)
+        {
+            RectTransform rectTransform  = npMenu.EscapeButton.GetComponent<RectTransform>();
+            rectTransform.Rotate(rectTransform.localEulerAngles + new Vector3(rotation.x, rotation.y, 0), Space.Self);
+        }
+        
+        protected void SetEscapeButtonText(Image image)
+        {
+        }
+        public void ClearUI(bool clearData = true, bool clearTabs = true)
         {
             if (IElementsIDDictionary != null && IElementsIDDictionary.Count > 0)
             {
-                foreach (NP_UIElements element in IElementsIDDictionary.Values)
+                if (!clearTabs)
                 {
-                    if (element != null)
+                    List<GenericUIData> tabDatas = genericUIDatas.Where(x=>x is TabData).ToList();
+                    foreach (NP_UIElements element in IElementsIDDictionary.Values)
                     {
-                        Destroy(element.gameObject);
+                        if (element != null && tabDatas.Find(x=>x.GetUIElement() == element) == null)
+                        {
+                            Destroy(element.gameObject);
+                        }
+                    }
+                }
+                else
+                {
+                    foreach (NP_UIElements element in IElementsIDDictionary.Values)
+                    {
+                        if (element != null)
+                        {
+                            Destroy(element.gameObject);
+                        }
                     }
                 }
 
@@ -94,9 +138,9 @@ namespace NP_UI
             }
         }
 
-        protected void CreateUI()
+        protected virtual void CreateUI()
         {
-            SetFields();
+            SetFields(npMenu);
             CreateMenuItems();
             AddElementsByDataToMenu(genericUIDatas, _elementsSystem);
             AddListeners();
@@ -124,8 +168,13 @@ namespace NP_UI
 
         public void SetFields(NP_Menu npMenu)
         {
+            _elementsSystem = new ElemetsIDSystem(npMenu.menuData.MenuName);
             headLineText = npMenu.headLineText;
             gridLayoutGroup = npMenu.gridLayoutGroup;
+            if (MenuGameObject == null)
+            {
+                MenuGameObject = gameObject;
+            }
         }
 
         private void SetFields()
@@ -227,6 +276,16 @@ namespace NP_UI
         {
         }
 
+        protected void HideAndShowHeadLine(bool toEnable)
+        {
+            headLineText.SetText(String.Empty);
+        }
+
+        protected void HideAndShowHeadLine()
+        {
+            headLineText.SetText(headLineText.GetText() == string.Empty ? npMenu.menuData.MenuName : string.Empty);
+        }
+
         /// <summary>
         /// Generic function to retrieve a specific UI element by its data ID.
         /// </summary>
@@ -268,12 +327,15 @@ namespace NP_UI
                 return null;
             }
         }
-    }
 
-    //public interface ICreatableMenu
-    //{
-    //    void CreateMenuItems();
-//
-    //    void StartAfterCreation();
-    //}
+        protected void TransitMenuTo(Vector2 target, float duration = 0.3f)
+        {
+            uiAnimator.MoveTo(target, duration);
+        }
+        
+        protected void TransitMenuToStart(float duration = 0.3f)
+        {
+            uiAnimator.MoveToStart(duration);
+        }
+    }
 }

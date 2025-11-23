@@ -95,8 +95,8 @@ public class NP_CheckBox : NP_UIElements, IImageableElement
     {
         _toggleButtonImage.SetBackgroundImage(spriteTexture);
     }
-	 
-	public void SetToggleValue(bool isOn)
+    
+    public void SetToggleValue(bool isOn)
     {
         _toggle.isOn = isOn;
     }

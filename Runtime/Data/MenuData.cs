@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Reflection;
 
 [Serializable]
 public class MenuData : IEquatable<MenuData>
@@ -429,5 +430,17 @@ public class MenuData : IEquatable<MenuData>
             return true;
         }
         return !other1.Equals(other2);
+    }
+
+    public MenuData Clone()
+    {
+        MenuData CloneMenuData = new MenuData(this.MenuName, this.ItemType);
+        FieldInfo[] currentFields = GetType().GetFields(BindingFlags.Instance | BindingFlags.Public);
+        foreach (FieldInfo currentField in currentFields)
+        {
+            var value = currentField.GetValue(this);
+            currentField.SetValue(CloneMenuData, value);
+        }
+        return CloneMenuData;
     }
 }

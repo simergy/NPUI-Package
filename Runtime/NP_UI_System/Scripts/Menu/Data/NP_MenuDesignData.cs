@@ -195,6 +195,10 @@ public class NP_MenuDesignData : Singleton<NP_MenuDesignData>
         {
             npUIElements = CreateCheckBox(uiData);
         }
+        if (typeOfData == typeof(TabData))
+        {
+            npUIElements = CreateButton(uiData);
+        }
         if (npUIElements != null)
         {
             npUIElements.ID = uiData.ID;

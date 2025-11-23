@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using NP_UI;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -35,6 +36,7 @@ using UnityEngine.Events;
     {
         Regular,
         Form,
+        Tabs
     }
 
     public enum MenuFormType
@@ -167,6 +169,65 @@ using UnityEngine.Events;
         }
 
         public ButtonData(UnityAction onClick, string text, UnityEngine.Color backgroundColor)
+        {
+            ClickAction = onClick;
+            MenuIcon = null;
+            Text = text;
+            BackgroundColor = backgroundColor;
+        }
+
+        protected ButtonData()
+        {
+        }
+
+        public override NP_UIElements GetUIElement()
+        {
+            return UIElement;
+        }
+    }
+
+    public class TabData : ButtonData
+    {
+        public MenuData NpMenuData;
+        public Type TypeOfMenu;
+        public UnityAction ClickAction;
+        public string Text;
+        public UnityEngine.Color BackgroundColor;
+        public UnityEngine.Sprite MenuIcon;
+
+        public TabData (UnityAction onClick, string textButton) : base(onClick, textButton)
+        {
+            ClickAction = onClick;
+            Text = textButton;
+            MenuIcon = null;
+        }
+        public TabData (MenuData menuData, string textButton)
+        {
+            Text = textButton;
+            NpMenuData = menuData;
+        }
+        public TabData (Type typeOfMenu, string textButton, UnityAction onClick)
+        {
+            Text = textButton;
+            TypeOfMenu = typeOfMenu;
+            ClickAction = onClick;
+        }
+
+        public TabData (UnityAction onClick, UnityEngine.Sprite menuIcon) : base(onClick, menuIcon)
+        {
+            ClickAction = onClick;
+            MenuIcon = menuIcon;
+            Text = String.Empty;
+        }
+
+        public TabData (UnityAction onClick, UnityEngine.Sprite menuIcon, string text) : base(onClick, menuIcon, text)
+        {
+            ClickAction = onClick;
+            MenuIcon = menuIcon;
+            Text = text;
+        }
+
+        public TabData (UnityAction onClick, string text, UnityEngine.Color backgroundColor) : base(onClick, text, backgroundColor)
         {
             ClickAction = onClick;
             MenuIcon = null;

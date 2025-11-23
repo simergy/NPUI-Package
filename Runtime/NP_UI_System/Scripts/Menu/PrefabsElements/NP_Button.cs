@@ -47,6 +47,14 @@ namespace NP_UI
                 buttonComponent.onClick.AddListener(onClickAction);
             }
         }
+        
+        public void AddOnClick(UnityAction onClickAction)
+        {
+            if (buttonComponent != null)
+            {
+                buttonComponent.onClick.AddListener(onClickAction);
+            }
+        }
 
         public void SetBackgroundImage(Sprite texture)
         {
@@ -72,7 +80,7 @@ namespace NP_UI
         public void SetBackgroundColor(Color color)
         {
             ColorChanger.ShiftGradientHueDAG(dagBackgroundImageComponent, color);
-            ColorChanger.DarkenExistingGradientDAG(dagBackgroundImageComponent, 1f);
+            //ColorChanger.DarkenExistingGradientDAG(dagBackgroundImageComponent, 1f);
         }
 
         public void SetTextColor(Color color)

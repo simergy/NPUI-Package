@@ -1,11 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
 using NP_UI;
-using System;
 
 public class NP_MenusManager :  Singleton<NP_MenusManager> 
 {

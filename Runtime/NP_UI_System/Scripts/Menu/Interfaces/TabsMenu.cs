@@ -80,6 +80,7 @@ namespace NP_UI
             if (tabData.ClickAction != null)
             {
                 npButton.AddOnClick(tabData.ClickAction);
+                npButton.AddOnClick(OpenMenuIfClosed);
             }
         }
         private NP_Button CreateNPButton(TabData tabData)

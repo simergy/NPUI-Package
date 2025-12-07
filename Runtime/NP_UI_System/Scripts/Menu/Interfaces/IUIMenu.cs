@@ -31,7 +31,7 @@ namespace NP_UI
             MenuGameObject.SetActive(true);
         }
 
-        public void CloaseMenuExceptMe(NpGenericMenu menu)
+        private void CloseMenuExceptMe(NpGenericMenu menu)
         {
             if (menu != this)
             {
@@ -160,7 +160,7 @@ namespace NP_UI
             if (!npMenu.menuData.IsAlwaysOn)
             {
                 NP_EventsManager.CloseAllMenus.AddListener(CloseMenu);
-                NP_EventsManager.CloseAllMenusExceptMe.AddListener(CloaseMenuExceptMe);
+                NP_EventsManager.CloseAllMenusExceptMe.AddListener(CloseMenuExceptMe);
             }
         }
 

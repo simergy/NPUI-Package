@@ -366,6 +366,58 @@ using UnityEngine.Events;
         }
     }
 
+    public class AccordionData : GenericUIData
+    {
+        public MenuData NpMenuData;
+        public UnityAction ClickAction;
+        public string Text;
+        public List<AccordionData> AccordionChildren;
+        public AccordionData ParentAccordion;
+        public List<GenericUIData> UiElementsData;
+
+        public AccordionData(string text,  List<AccordionData> accordionChildren = null, List<GenericUIData> uiElementsData = null)
+        {
+            Text = text;
+            NpMenuData = null;
+            ClickAction = null;
+            AccordionChildren = accordionChildren;
+            UiElementsData = uiElementsData;
+        }
+        
+        public AccordionData(string text, List<GenericUIData> uiElementsData)
+        {
+            Text = text;
+            NpMenuData = null;
+            ClickAction = null;
+            AccordionChildren = null;
+            UiElementsData = uiElementsData;
+        }
+        
+        public AccordionData(string text, MenuData npMenuData = null, UnityAction onClick = null, List<AccordionData> accordionChildren = null, List<GenericUIData> uiElementsData = null)
+        {
+            Text = text;
+            NpMenuData = npMenuData;
+            ClickAction = onClick;
+            AccordionChildren = accordionChildren;
+            UiElementsData = uiElementsData;
+        }
+        
+        public AccordionData(string text)
+        {
+            Text = text;
+            NpMenuData = null;
+            ClickAction = null;
+            AccordionChildren = null;
+            UiElementsData = null;
+        }
+        
+        public override NP_UIElements GetUIElement()
+        {
+            return UIElement;
+        }
+    }
+
+
     public class SliderData : GenericUIData
     {
         public UnityAction<float> OnValueChanged;
@@ -423,4 +475,8 @@ using UnityEngine.Events;
         {
             return UIElement;
         }
+        
+        
+        
+
     }

@@ -7,7 +7,6 @@ namespace NP_UI
     {
         public static UnityEvent<NpGenericMenu> CloseMenuEvent = new UnityEvent<NpGenericMenu>();
         public static UnityEvent<NpGenericMenu> OpenMenuEvent = new UnityEvent<NpGenericMenu>();
-        public static UnityEvent<NpGenericMenu> CloseAllMenusExceptMe = new UnityEvent<NpGenericMenu>();
         public static UnityEvent CloseAllMenus = new UnityEvent();
         public static UnityEvent<NpGenericMenu> OnMenuCreated = new UnityEvent<NpGenericMenu>();
     }

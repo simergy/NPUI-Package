@@ -23,7 +23,7 @@ public class NP_AccordionItem : NP_UIElements, ITextableElement, IClickableEleme
     [SerializeField] private int level = 0;
     [SerializeField] private bool startExpanded = false;
     [SerializeField] private NP_AccordionItem parentAccordion;
-    [SerializeField] public List<NP_AccordionItem> childAccordions = new List<NP_AccordionItem>();
+    [SerializeField] private List<NP_AccordionItem> childAccordions = new List<NP_AccordionItem>();
 
     private static int Index = 0;
 

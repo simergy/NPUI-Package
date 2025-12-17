@@ -1,8 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
 using System.Collections.Generic;
-using System.Linq;
-using NP_UI;
 using UnityEngine.Events;
 
 /// <summary>
@@ -11,17 +9,16 @@ using UnityEngine.Events;
 /// </summary>
 public class NP_AccordionItem : NP_UIElements, ITextableElement, IClickableElement
 {
+    #region Fields
     [Header("References")]
     [SerializeField] private RectTransform header;
     [SerializeField] private Image arrowIcon;
     [SerializeField] private Text headerText;
     [SerializeField] private Transform itemContent;
     [SerializeField] private Button buttonHeader;
-    [SerializeField] private AccordionData accordionDataParent;
-    [SerializeField] private List<AccordionData> accordionDataList;
     [SerializeField] private Transform contentRawParent;
-    private Transform parentTransform;
-    
+
+
     [Header("Settings")]
     [SerializeField] private int level = 0;
     [SerializeField] private bool startExpanded = false;
@@ -33,12 +30,16 @@ public class NP_AccordionItem : NP_UIElements, ITextableElement, IClickableEleme
     private const float OffsetX = 30;
 
     private bool isExpanded;
-    
+    private Transform parentTransform;
+    private List<AccordionData> accordionDataList;
+    private AccordionData accordionDataParent;
     private RectTransform _headerRectTransform;
     private GridLayoutGroup _itemContentGrid;
     private Image _headerImage, _contentImage;
     private NP_Accordion _accordionContainer;
-    
+    #endregion
+
+    #region  Initialisation
     /// <summary>
     /// Initializes the accordion item with parent, hierarchy level, and optional container.
     /// </summary>
@@ -57,7 +58,6 @@ public class NP_AccordionItem : NP_UIElements, ITextableElement, IClickableEleme
         else
         {
             transform.SetSiblingIndex(++Index);
-            print(headerText.text + Index.ToString());
         }
         
         
@@ -95,37 +95,6 @@ public class NP_AccordionItem : NP_UIElements, ITextableElement, IClickableEleme
         _headerImage = header.GetComponent<Image>();
         _contentImage = itemContent.GetComponent<Image>();
     }
-
-    private void ExpandUIElementsPanel()
-    {
-        itemContent.gameObject.SetActive(false);
-    }
-
-    /// <summary>
-    /// Adds a child accordion item to this item.
-    /// </summary>
-    /// <param name="child">The child item to add.</param>
-    public void AddChild(NP_AccordionItem child)
-    {
-        if (!childAccordions.Contains(child))
-        {
-            childAccordions.Add(child);
-            child.transform.SetSiblingIndex(++Index);
-            print(child.headerText.text + Index.ToString());
-        }
-    }
-
-    private int GetIndexFromData(NP_AccordionItem child)
-    {
-        AccordionData accordionData = accordionDataList.FirstOrDefault(x => x.GetUIElement() == child);
-        int indexInData = 0;
-        if (accordionData != null)
-        {
-            indexInData = accordionDataParent.AccordionChildren.IndexOf(accordionData);
-        }
-        return indexInData;
-    }
-    
     private void Start()
     {
         if (parentAccordion == null && level == 0)
@@ -160,6 +129,30 @@ public class NP_AccordionItem : NP_UIElements, ITextableElement, IClickableEleme
             }
         }
     }
+    #endregion
+
+    #region Toggle
+
+    private void ExpandUIElementsPanel()
+    {
+        itemContent.gameObject.SetActive(false);
+    }
+
+    /// <summary>
+    /// Adds a child accordion item to this item.
+    /// </summary>
+    /// <param name="child">The child item to add.</param>
+    public void AddChild(NP_AccordionItem child)
+    {
+        if (!childAccordions.Contains(child))
+        {
+            childAccordions.Add(child);
+            child.transform.SetSiblingIndex(++Index);
+            print(child.headerText.text + Index.ToString());
+        }
+    }
+    
+
     
     /// <summary>
     /// Toggles the expansion state of the accordion item.
@@ -179,7 +172,7 @@ public class NP_AccordionItem : NP_UIElements, ITextableElement, IClickableEleme
         UpdateArrowRotation();
         UpdateColor();
         LayoutRebuilder.ForceRebuildLayoutImmediate(_headerRectTransform);
-        GetComponentInParent<NP_Accordion>().RebuildLayout();
+        _accordionContainer.RebuildLayout();
     }
 
     private void ToggleElementsAppearance()
@@ -194,7 +187,7 @@ public class NP_AccordionItem : NP_UIElements, ITextableElement, IClickableEleme
             PositionItemContent();
         }
 
-        GetComponentInParent<NP_Accordion>().RebuildLayout();
+        _accordionContainer.RebuildLayout();
         LayoutRebuilder.ForceRebuildLayoutImmediate(_headerRectTransform);
     }
 
@@ -206,6 +199,7 @@ public class NP_AccordionItem : NP_UIElements, ITextableElement, IClickableEleme
         gridLayoutGroup.padding.left = ((int)OffsetX-5)* level;
     }
 
+    //To be used
     private void HandleColorsManagement(Transform contentTransform, Transform headerTransform)
     {
         if (contentTransform.gameObject.activeSelf)
@@ -259,64 +253,6 @@ public class NP_AccordionItem : NP_UIElements, ITextableElement, IClickableEleme
         }
     }
     
-    /// <summary>
-    /// Expands the accordion item if it has children.
-    /// </summary>
-    public void Expand()
-    {
-        if (!isExpanded && childAccordions.Count > 0)
-        {
-            Toggle();
-        }
-    }
-    
-    /// <summary>
-    /// Collapses the accordion item.
-    /// </summary>
-    public void Collapse()
-    {
-        if (isExpanded)
-        {
-            Toggle();
-        }
-    }
-    
-    /// <summary>
-    /// Collapses this item and all its children recursively.
-    /// </summary>
-    public void CollapseAll()
-    {
-        if (isExpanded)
-        {
-            isExpanded = false;
-            UpdateChildrenVisibility();
-            UpdateArrowRotation();
-        }
-        
-        foreach (NP_AccordionItem child in childAccordions)
-        {
-            child.CollapseAll();
-        }
-    }
-    
-    /// <summary>
-    /// Expands this item and all its children recursively.
-    /// </summary>
-    public void ExpandAll()
-    {
-        if (!isExpanded && childAccordions.Count > 0)
-        {
-            isExpanded = true;
-            UpdateChildrenVisibility();
-            UpdateArrowRotation();
-        }
-        
-        foreach (NP_AccordionItem child in childAccordions)
-        {
-            child.ExpandAll();
-        }
-    }
-    
     private void UpdateArrowRotation()
     {
         if (arrowIcon != null)
@@ -334,20 +270,54 @@ public class NP_AccordionItem : NP_UIElements, ITextableElement, IClickableEleme
         }
     }
     
-    /// <summary>
-    /// Sets the action to be performed when the header button is clicked.
-    /// </summary>
-    /// <param name="action">The action to execute.</param>
-    /// <param name="isRemoveListeners">If true, removes existing listeners before adding the new one.</param>
-    public void SetButtonActions(UnityAction action, bool isRemoveListeners = false)
+    #endregion
+
+    #region Layout Orgenizer
+    private void AddElements(List<GenericUIData> dataElementsList)
     {
-        if (isRemoveListeners)
+        if (dataElementsList == null || dataElementsList.Count == 0)
         {
-            buttonHeader.onClick.RemoveAllListeners();
+            return;
         }
-        buttonHeader.onClick.AddListener(action);
+        foreach (GenericUIData dataElement in dataElementsList)
+        {
+            CreateElement(dataElement);
+        }
+    }
+    private void AddElementLayoutGroup(NP_UIElements npElement)
+    {
+        if (npElement == null)
+        {
+            return;
+        }
+
+        LayoutElement layoutElement = npElement.gameObject.AddComponent<LayoutElement>();
+        layoutElement.preferredHeight = 30;
+        layoutElement.preferredWidth = 150;
     }
 
+    private void AddContentSizeFitterToElement(NP_UIElements npElement)
+    {
+        if (npElement == null)
+        {
+            return;
+        }
+
+        ContentSizeFitter contentSizeFitter = npElement.gameObject.GetComponent<ContentSizeFitter>();
+        if (contentSizeFitter == null)
+        {
+            contentSizeFitter = npElement.gameObject.AddComponent<ContentSizeFitter>();
+        }
+
+        contentSizeFitter.enabled = true;
+        contentSizeFitter.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
+        contentSizeFitter.horizontalFit = ContentSizeFitter.FitMode.PreferredSize;
+    }
+    
+
+    #endregion
+
+    #region API
     /// <summary>
     /// Sets the text of the header.
     /// </summary>
@@ -423,25 +393,13 @@ public class NP_AccordionItem : NP_UIElements, ITextableElement, IClickableEleme
     /// </summary>
     /// <param name="onClickAction">The action to execute.</param>
     /// <param name="isRemoveListeners">If true, removes existing listeners.</param>
-    public void SetOnClick(UnityAction onClickAction, bool isRemoveListeners = false)
+    public void SetOnClick(UnityAction onClickAction, bool isRemoveListeners)
     {
         if (isRemoveListeners)
         {
             buttonHeader.onClick.RemoveAllListeners();
         }
         buttonHeader.onClick.AddListener(onClickAction);
-    }
-
-    /// <summary>
-    /// Sets the children of this accordion item.
-    /// </summary>
-    /// <param name="children">The list of children to add.</param>
-    public void SetChildren(List<NP_AccordionItem> children)
-    {
-        foreach (NP_AccordionItem child in children)
-        {
-            AddChild(child);
-        }
     }
 
     /// <summary>
@@ -480,35 +438,7 @@ public class NP_AccordionItem : NP_UIElements, ITextableElement, IClickableEleme
         return npElement;
     }
 
-    private void AddElementLayoutGroup(NP_UIElements npElement)
-    {
-        if (npElement == null)
-        {
-            return;
-        }
-
-        LayoutElement layoutElement = npElement.gameObject.AddComponent<LayoutElement>();
-        layoutElement.preferredHeight = 30;
-        layoutElement.preferredWidth = 150;
-    }
-
-    private void AddContentSizeFitterToElement(NP_UIElements npElement)
-    {
-        if (npElement == null)
-        {
-            return;
-        }
-
-        ContentSizeFitter contentSizeFitter = npElement.gameObject.GetComponent<ContentSizeFitter>();
-        if (contentSizeFitter == null)
-        {
-            contentSizeFitter = npElement.gameObject.AddComponent<ContentSizeFitter>();
-        }
-
-        contentSizeFitter.enabled = true;
-        contentSizeFitter.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
-        contentSizeFitter.horizontalFit = ContentSizeFitter.FitMode.PreferredSize;
-    }
+ 
 
     /// <summary>
     /// Gets the grid layout group of the content panel.
@@ -539,17 +469,7 @@ public class NP_AccordionItem : NP_UIElements, ITextableElement, IClickableEleme
         }
         AddElements(dataElementsList);
     }
-    private void AddElements(List<GenericUIData> dataElementsList)
-    {
-        if (dataElementsList == null || dataElementsList.Count == 0)
-        {
-            return;
-        }
-        foreach (GenericUIData dataElement in dataElementsList)
-        {
-            CreateElement(dataElement);
-        }
-    }
+
     
     /// <summary>
     /// Traverses the hierarchy starting from this item, executing an action on each item.
@@ -572,4 +492,6 @@ public class NP_AccordionItem : NP_UIElements, ITextableElement, IClickableEleme
             }
         }
     }
+    #endregion
+
 }

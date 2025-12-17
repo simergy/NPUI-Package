@@ -152,8 +152,6 @@ public class NP_AccordionItem : NP_UIElements, ITextableElement, IClickableEleme
         }
     }
     
-
-    
     /// <summary>
     /// Toggles the expansion state of the accordion item.
     /// </summary>
@@ -250,6 +248,8 @@ public class NP_AccordionItem : NP_UIElements, ITextableElement, IClickableEleme
         if (!shouldBeVisible && isExpanded)
         {
             UpdateChildrenVisibility();
+            isExpanded = !isExpanded;
+            UpdateArrowRotation();
         }
     }
     

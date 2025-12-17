@@ -1,11 +1,9 @@
 using System;
 using System.Collections.Generic;
-using Codice.Client.BaseCommands;
 using DA_Assets.Extensions;
 using NP_UI;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.UIElements;
 
 public class NP_MenuDesignData : Singleton<NP_MenuDesignData>
 {

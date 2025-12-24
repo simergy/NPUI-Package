@@ -58,4 +58,9 @@ public class NP_Accordion : NP_UIElements
     {
         ScrollRect.gameObject.GetComponent<Image>().color = color;
     }
+
+    public void Rescale(float scalar)
+    {
+        uiRectTransform.localScale = new Vector2(scalar, scalar);
+    }
 }

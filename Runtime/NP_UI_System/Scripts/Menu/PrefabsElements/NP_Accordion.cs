@@ -61,6 +61,16 @@ public class NP_Accordion : NP_UIElements
 
     public void Rescale(float scalar)
     {
-        uiRectTransform.localScale = new Vector2(scalar, scalar);
+        foreach (Transform child in contentTransform)
+        {
+            NP_AccordionItem item = child.GetComponent<NP_AccordionItem>();
+            if (item != null)
+            {
+                item.Rescale(scalar);
+            }
+        }
+        RebuildLayout();
     }
+
+
 }

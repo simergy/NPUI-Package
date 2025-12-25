@@ -25,8 +25,18 @@ public class NP_AccordionItem : NP_UIElements, ITextableElement, IClickableEleme
     [SerializeField] private NP_AccordionItem parentAccordion;
     [SerializeField] private List<NP_AccordionItem> childAccordions = new List<NP_AccordionItem>();
 
-    private static int Index = 0;
+    [Header("Rescaling Requirements")]
+    [SerializeField] private LayoutElement accordionItemLayoutElement;
+    [SerializeField] private LayoutElement headerLayoutElement;
+    [SerializeField] private RectTransform arrowIconRectTransform;
+    [SerializeField] private RectTransform headerTextRectTransform;
+    [SerializeField] private RectTransform accordionRectTransform;
+    [SerializeField] private LayoutElement arrowAndLabelParentLayoutElement;
+    [SerializeField] private RectTransform arrowAndLabelParentRectTransform;
+    
 
+    private static int Index = 0;
+    private float scalarFontNormalizer = 0.8f;
     private const float OffsetX = 30;
 
     private bool isExpanded;
@@ -37,6 +47,8 @@ public class NP_AccordionItem : NP_UIElements, ITextableElement, IClickableEleme
     private GridLayoutGroup _itemContentGrid;
     private Image _headerImage, _contentImage;
     private NP_Accordion _accordionContainer;
+
+    
     #endregion
 
     #region  Initialisation
@@ -494,4 +506,93 @@ public class NP_AccordionItem : NP_UIElements, ITextableElement, IClickableEleme
     }
     #endregion
 
+    #region Rescale
+
+    private void RescaleHeaderFontSize(float scalar)
+    {
+        //Handel font size
+        if (headerText != null)
+        {
+            int fontSize = headerText.fontSize;
+            headerText.fontSize = (int)((float)fontSize * (scalar * scalarFontNormalizer));
+        }
+
+    }
+
+    private void RescaleArrowIcon(float scalar)
+    {
+        //Handel Arrow Icon
+        //RectTransform arrowIconRectTransform = arrowIcon.GetComponent<RectTransform>();
+        if (arrowIconRectTransform)
+        {
+            RectTransform.Axis vertical = RectTransform.Axis.Vertical;
+            RectTransform.Axis horizontal = RectTransform.Axis.Horizontal;
+            float normalizedScalar = scalar * 0.55f;
+            float newSizeDeltaY = arrowIconRectTransform.sizeDelta.y * normalizedScalar;
+            float newSizeDeltaX = arrowIconRectTransform.sizeDelta.x * normalizedScalar;
+            
+            arrowIconRectTransform.SetSizeWithCurrentAnchors(vertical,newSizeDeltaY);
+            arrowIconRectTransform.SetSizeWithCurrentAnchors(horizontal,newSizeDeltaX);
+        }
+    }
+
+    private void RescaleHeaderRectTransform(float scalar)
+    {
+        //Handel Header Text
+        if (headerTextRectTransform)
+        {
+            float currentPreferredHeightOfText = headerTextRectTransform.rect.height;
+            headerTextRectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, currentPreferredHeightOfText * scalar);
+        }
+    }
+
+    private void RescaleTextAndIconParent(float scalar)
+    {
+        //Handel Arrow and Label
+        if (arrowAndLabelParentLayoutElement)
+        {
+            float currentPreferredHeight = arrowAndLabelParentLayoutElement.preferredHeight;
+            arrowAndLabelParentLayoutElement.preferredHeight = currentPreferredHeight * scalar;    
+            arrowAndLabelParentRectTransform.sizeDelta = new Vector2(arrowAndLabelParentRectTransform.sizeDelta.x, arrowAndLabelParentLayoutElement.preferredHeight);
+        }
+    }
+
+    private void RescaleHeaderLayoutElement(float scalar)
+    {
+        //Handel Header Layout
+        if(headerLayoutElement != null)
+        {
+            float currentMinHeight = headerLayoutElement.minHeight;
+            headerLayoutElement.minHeight = currentMinHeight * scalar;
+            headerLayoutElement.preferredHeight = currentMinHeight * scalar;
+            _headerRectTransform.sizeDelta = new Vector2(_headerRectTransform.sizeDelta.x, headerLayoutElement.preferredHeight);
+        }
+    }
+
+    private void RescaleAccordionItem(float childMinHeight)
+    {
+        //Handel AccordionItem Layout
+        if(accordionItemLayoutElement != null)
+        {
+            float currentMinHeight = childMinHeight;
+            accordionItemLayoutElement.minHeight = currentMinHeight;
+            accordionItemLayoutElement.preferredHeight = currentMinHeight;
+            accordionRectTransform.sizeDelta = new Vector2(accordionRectTransform.sizeDelta.x, accordionItemLayoutElement.preferredHeight);
+        }
+    }
+    public void Rescale(float scalar)
+    {
+        RescaleHeaderFontSize(scalar);
+        
+        RescaleArrowIcon(scalar);
+
+        RescaleHeaderRectTransform(scalar);
+        
+        RescaleTextAndIconParent(scalar);
+        
+        RescaleHeaderLayoutElement(scalar);
+
+        RescaleAccordionItem(headerLayoutElement.preferredHeight);
+    }
+    #endregion
 }

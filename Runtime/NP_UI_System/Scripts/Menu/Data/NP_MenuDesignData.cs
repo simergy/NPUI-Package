@@ -177,7 +177,6 @@ public class NP_MenuDesignData : Singleton<NP_MenuDesignData>
     // will set the parent transform of the returned NP_AccordionItem immediately.
     private NP_UIElements CreateAccordion(GenericUIData uiData)
     {
-        bool useFirst = false;
         AccordionData rootAccordionData = uiData as AccordionData;
         
         if (rootAccordionData == null)
@@ -188,22 +187,6 @@ public class NP_MenuDesignData : Singleton<NP_MenuDesignData>
         
         //Get the root enviroment
         NP_Accordion rootAccordionEnvironment = Instantiate(_npAccordion, Vector3.zero, Quaternion.identity);
-
-        if (useFirst)
-        {
-            // 1. Instantiate the ROOT accordion item
-            NP_AccordionItem rootAccordionItem = Instantiate(_npAccordionItem, Vector3.zero, Quaternion.identity);
-
-            // 2. Configure the ROOT item with its data
-            rootAccordionItem.SetText(rootAccordionData.Text);
-            if (rootAccordionData.ClickAction != null)
-            {
-                rootAccordionItem.SetOnClick(rootAccordionData.ClickAction, isRemoveListeners: false);
-            }
-
-            // Note: SetParentData is usually null for the root item being created
-            rootAccordionItem.SetChildrenData(rootAccordionData.AccordionChildren);
-        }
 
         // 3. Initiate the recursive process for all children
         // The first call uses the root item as the parent, level 0.

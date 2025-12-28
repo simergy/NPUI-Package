@@ -69,13 +69,11 @@ MonoBehaviour:
         - TextMeshPro Urbanist-Regular-36-LeftTop-Black255
         - txt - welcome
         - style-txt - welcome-347222481
-    tags: c800000065000000
-    fcuImageType: 0
-    buttonComponent: 0
-    childIndexes: 
-    fcu: {fileID: 0}
     gameObject: {fileID: 592807669697671462}
-    hash: 347222481
+    fcu: {fileID: 0}
+    rootFrameGO: {fileID: 1830339034517162169}
+    parentIndex: 0
+    childIndexes: 
     hierarchy:
     - Index: -1
       Name: Login Screen - Test
@@ -86,9 +84,15 @@ MonoBehaviour:
     - Index: 1
       Name: txt - welcome
       Guid: 4d04b76a0597443e89c3fcf8cbe63ee8
-    rootFrameGO: {fileID: 1830339034517162169}
-    hashDataTree: 
-    parentIndex: 0
+    tags: c800000065000000
+    tagReasons: []
+    fcuImageType: 0
+    buttonComponent: 0
+    rect:
+      position: {x: 0, y: 0}
+      size: {x: 0, y: 0}
+      angle: 0
+      absoluteAngle: 0
     uguiTransformData:
       anchorMin: {x: 0, y: 0}
       anchorMax: {x: 0, y: 0}
@@ -97,6 +101,8 @@ MonoBehaviour:
       localRotation: {x: 0, y: 0, z: 0, w: 0}
       localPosition: {x: 0, y: 0, z: 0}
       localScale: {x: 0, y: 0, z: 0}
+    parentTransform: {fileID: 0}
+    parentTransformRect: {fileID: 0}
     graphic:
       hasFill: 0
       hasStroke: 0
@@ -114,35 +120,26 @@ MonoBehaviour:
         singleColor: {r: 0, g: 0, b: 0, a: 0}
       spriteSingleColor: {r: 0, g: 0, b: 0, a: 0}
       fillAlpha1: 0
-    rectGameObject: {fileID: 0}
-    spriteSize: {x: 0, y: 0}
-    rect:
-      _position: {x: 0, y: 0}
-      _size: {x: 0, y: 0}
-      _angle: 0
-      _absoluteAngle: 0
     spritePath: 
+    spriteSize: {x: 0, y: 0}
+    maxSpriteSize: {x: 0, y: 0}
+    imageFormat: 0
+    scale: 0
     link: 
-    tagReasons: []
-    downloadableReason: 
-    generativeReason: 
-    downloadAttempsCount: 0
-    isDuplicate: 0
-    isMutual: 0
-    isEmpty: 0
     needDownload: 0
     needGenerate: 0
     forceImage: 0
-    isOverlappedByStroke: 0
     forceContainer: 0
+    isMutual: 0
+    isEmpty: 0
+    isOverlappedByStroke: 0
     isInsideDownloadable: 0
     hasFontAsset: 0
-    imageFormat: 0
-    scale: 0
-    maxSpriteSize: {x: 0, y: 0}
-    parentTransformRect: {fileID: 0}
-    parentTransform: {fileID: 0}
-    partOfPrefab: 0
+    hash: 347222481
+    downloadableReason: 
+    generativeReason: 
+    downloadAttempsCount: 0
+    rectGameObject: {fileID: 0}
 --- !u!114 &456088099941284142
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -529,20 +526,24 @@ MonoBehaviour:
         - 
         - Login Screen - Test
         - style-Login Screen - Test-1820204460
-    tags: 02000000f6010000c900000001000000
-    fcuImageType: 2
-    buttonComponent: 0
-    childIndexes: 01000000020000000300000004000000
-    fcu: {fileID: 0}
     gameObject: {fileID: 1830339034517162169}
-    hash: 1820204460
+    fcu: {fileID: 0}
+    rootFrameGO: {fileID: 1830339034517162169}
+    parentIndex: 0
+    childIndexes: 01000000020000000300000004000000
     hierarchy:
     - Index: -1
       Name: Login Screen - Test
       Guid: 70b30d4c108c48c5acf5d02b63bd9ac7
-    rootFrameGO: {fileID: 1830339034517162169}
-    hashDataTree: 
-    parentIndex: 0
+    tags: 02000000f6010000c900000001000000
+    tagReasons: []
+    fcuImageType: 2
+    buttonComponent: 0
+    rect:
+      position: {x: 0, y: 0}
+      size: {x: 0, y: 0}
+      angle: 0
+      absoluteAngle: 0
     uguiTransformData:
       anchorMin: {x: 0, y: 0}
       anchorMax: {x: 0, y: 0}
@@ -551,6 +552,8 @@ MonoBehaviour:
       localRotation: {x: 0, y: 0, z: 0, w: 0}
       localPosition: {x: 0, y: 0, z: 0}
       localScale: {x: 0, y: 0, z: 0}
+    parentTransform: {fileID: 0}
+    parentTransformRect: {fileID: 0}
     graphic:
       hasFill: 0
       hasStroke: 0
@@ -568,35 +571,26 @@ MonoBehaviour:
         singleColor: {r: 0, g: 0, b: 0, a: 0}
       spriteSingleColor: {r: 0, g: 0, b: 0, a: 0}
       fillAlpha1: 0
-    rectGameObject: {fileID: 0}
-    spriteSize: {x: 0, y: 0}
-    rect:
-      _position: {x: 0, y: 0}
-      _size: {x: 0, y: 0}
-      _angle: 0
-      _absoluteAngle: 0
     spritePath: 
+    spriteSize: {x: 0, y: 0}
+    maxSpriteSize: {x: 0, y: 0}
+    imageFormat: 0
+    scale: 0
     link: 
-    tagReasons: []
-    downloadableReason: 
-    generativeReason: 
-    downloadAttempsCount: 0
-    isDuplicate: 0
-    isMutual: 0
-    isEmpty: 0
     needDownload: 0
     needGenerate: 0
     forceImage: 0
-    isOverlappedByStroke: 0
     forceContainer: 0
+    isMutual: 0
+    isEmpty: 0
+    isOverlappedByStroke: 0
     isInsideDownloadable: 0
     hasFontAsset: 0
-    imageFormat: 0
-    scale: 0
-    maxSpriteSize: {x: 0, y: 0}
-    parentTransformRect: {fileID: 0}
-    parentTransform: {fileID: 0}
-    partOfPrefab: 0
+    hash: 1820204460
+    downloadableReason: 
+    generativeReason: 
+    downloadAttempsCount: 0
+    rectGameObject: {fileID: 0}
 --- !u!222 &833640050637343749
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -695,7 +689,7 @@ MonoBehaviour:
     TypeOfMenu: 0
     TypeOfFormMenu: 0
     UseEscapeButton: 0
-  EscapeButton: {fileID: 6448548987316675772}
+  EscapeButton: {fileID: 653827948662175081}
   _tabsContainer: {fileID: 1303286907870442861}
 --- !u!1 &2118244885864992784
 GameObject:
@@ -1701,7 +1695,6 @@ RectTransform:
   - {fileID: 1996987326548952500}
   - {fileID: 899277968010302353}
   - {fileID: 7893258378822115800}
-  - {fileID: 1456106798846872257}
   m_Father: {fileID: 6822484112598811281}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -1739,13 +1732,11 @@ MonoBehaviour:
         - 
         - Login Container
         - style-Login Container-509074146
-    tags: 01000000
-    fcuImageType: 0
-    buttonComponent: 0
-    childIndexes: 0500000006000000070000000f000000170000001f00000025000000
-    fcu: {fileID: 0}
     gameObject: {fileID: 5848833215984368147}
-    hash: -509074146
+    fcu: {fileID: 0}
+    rootFrameGO: {fileID: 1830339034517162169}
+    parentIndex: 0
+    childIndexes: 0500000006000000070000000f000000170000001f00000025000000
     hierarchy:
     - Index: -1
       Name: Login Screen - Test
@@ -1753,9 +1744,15 @@ MonoBehaviour:
     - Index: 3
       Name: Login Container
       Guid: 8f6dc1907d0b4c0fb81418e50afa5164
-    rootFrameGO: {fileID: 1830339034517162169}
-    hashDataTree: 
-    parentIndex: 0
+    tags: 01000000
+    tagReasons: []
+    fcuImageType: 0
+    buttonComponent: 0
+    rect:
+      position: {x: 0, y: 0}
+      size: {x: 0, y: 0}
+      angle: 0
+      absoluteAngle: 0
     uguiTransformData:
       anchorMin: {x: 0, y: 0}
       anchorMax: {x: 0, y: 0}
@@ -1764,6 +1761,8 @@ MonoBehaviour:
       localRotation: {x: 0, y: 0, z: 0, w: 0}
       localPosition: {x: 0, y: 0, z: 0}
       localScale: {x: 0, y: 0, z: 0}
+    parentTransform: {fileID: 0}
+    parentTransformRect: {fileID: 0}
     graphic:
       hasFill: 0
       hasStroke: 0
@@ -1781,35 +1780,26 @@ MonoBehaviour:
         singleColor: {r: 0, g: 0, b: 0, a: 0}
       spriteSingleColor: {r: 0, g: 0, b: 0, a: 0}
       fillAlpha1: 0
-    rectGameObject: {fileID: 0}
-    spriteSize: {x: 0, y: 0}
-    rect:
-      _position: {x: 0, y: 0}
-      _size: {x: 0, y: 0}
-      _angle: 0
-      _absoluteAngle: 0
     spritePath: 
+    spriteSize: {x: 0, y: 0}
+    maxSpriteSize: {x: 0, y: 0}
+    imageFormat: 0
+    scale: 0
     link: 
-    tagReasons: []
-    downloadableReason: 
-    generativeReason: 
-    downloadAttempsCount: 0
-    isDuplicate: 0
-    isMutual: 0
-    isEmpty: 0
     needDownload: 0
     needGenerate: 0
     forceImage: 0
-    isOverlappedByStroke: 0
     forceContainer: 0
+    isMutual: 0
+    isEmpty: 0
+    isOverlappedByStroke: 0
     isInsideDownloadable: 0
     hasFontAsset: 0
-    imageFormat: 0
-    scale: 0
-    maxSpriteSize: {x: 0, y: 0}
-    parentTransformRect: {fileID: 0}
-    parentTransform: {fileID: 0}
-    partOfPrefab: 0
+    hash: -509074146
+    downloadableReason: 
+    generativeReason: 
+    downloadAttempsCount: 0
+    rectGameObject: {fileID: 0}
 --- !u!1 &5988469097713366218
 GameObject:
   m_ObjectHideFlags: 0
@@ -2166,6 +2156,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5271926424575630315}
+  - {fileID: 4925290126365465364}
   m_Father: {fileID: 7395557750525396781}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
@@ -2203,13 +2194,11 @@ MonoBehaviour:
         - 
         - img - rectangle 4x 1069162574.png
         - style-img - rectangle-1069162574
-    tags: c9000000
-    fcuImageType: 1
-    buttonComponent: 0
-    childIndexes: 
-    fcu: {fileID: 0}
     gameObject: {fileID: 9005076445090047271}
-    hash: 1069162574
+    fcu: {fileID: 0}
+    rootFrameGO: {fileID: 1830339034517162169}
+    parentIndex: 0
+    childIndexes: 
     hierarchy:
     - Index: -1
       Name: Login Screen - Test
@@ -2220,9 +2209,15 @@ MonoBehaviour:
     - Index: 0
       Name: img - rectangle
       Guid: b12b1be753e541e5969936dfb215e801
-    rootFrameGO: {fileID: 1830339034517162169}
-    hashDataTree: 
-    parentIndex: 0
+    tags: c9000000
+    tagReasons: []
+    fcuImageType: 1
+    buttonComponent: 0
+    rect:
+      position: {x: 0, y: 0}
+      size: {x: 0, y: 0}
+      angle: 0
+      absoluteAngle: 0
     uguiTransformData:
       anchorMin: {x: 0, y: 0}
       anchorMax: {x: 0, y: 0}
@@ -2231,6 +2226,8 @@ MonoBehaviour:
       localRotation: {x: 0, y: 0, z: 0, w: 0}
       localPosition: {x: 0, y: 0, z: 0}
       localScale: {x: 0, y: 0, z: 0}
+    parentTransform: {fileID: 0}
+    parentTransformRect: {fileID: 0}
     graphic:
       hasFill: 0
       hasStroke: 0
@@ -2248,35 +2245,26 @@ MonoBehaviour:
         singleColor: {r: 0, g: 0, b: 0, a: 0}
       spriteSingleColor: {r: 0, g: 0, b: 0, a: 0}
       fillAlpha1: 0
-    rectGameObject: {fileID: 0}
-    spriteSize: {x: 0, y: 0}
-    rect:
-      _position: {x: 0, y: 0}
-      _size: {x: 0, y: 0}
-      _angle: 0
-      _absoluteAngle: 0
     spritePath: 
+    spriteSize: {x: 0, y: 0}
+    maxSpriteSize: {x: 0, y: 0}
+    imageFormat: 0
+    scale: 0
     link: 
-    tagReasons: []
-    downloadableReason: 
-    generativeReason: 
-    downloadAttempsCount: 0
-    isDuplicate: 0
-    isMutual: 0
-    isEmpty: 0
     needDownload: 0
     needGenerate: 0
     forceImage: 0
-    isOverlappedByStroke: 0
     forceContainer: 0
+    isMutual: 0
+    isEmpty: 0
+    isOverlappedByStroke: 0
     isInsideDownloadable: 0
     hasFontAsset: 0
-    imageFormat: 0
-    scale: 0
-    maxSpriteSize: {x: 0, y: 0}
-    parentTransformRect: {fileID: 0}
-    parentTransform: {fileID: 0}
-    partOfPrefab: 0
+    hash: 1069162574
+    downloadableReason: 
+    generativeReason: 
+    downloadAttempsCount: 0
+    rectGameObject: {fileID: 0}
 --- !u!222 &3275991400910934439
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -2315,172 +2303,107 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!1001 &976013387643985348
+--- !u!1001 &6765667970116455441
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 5271926424575630315}
+    m_TransformParent: {fileID: 6822484112598811281}
     m_Modifications:
-    - target: {fileID: 876114554560239472, guid: 25aea0b7626cb4f439867fab15117ee7, type: 3}
+    - target: {fileID: 876114554560239472, guid: 1c866597374504a40840be7f143abb88, type: 3}
       propertyPath: m_Name
       value: EscapeButton
       objectReference: {fileID: 0}
-    - target: {fileID: 1067190005379283287, guid: 25aea0b7626cb4f439867fab15117ee7, type: 3}
-      propertyPath: m_Texture
-      value: 
-      objectReference: {fileID: 2800000, guid: 7935de65023c1a34286a01d651af8d54, type: 3}
-    - target: {fileID: 1855023907875526405, guid: 25aea0b7626cb4f439867fab15117ee7, type: 3}
+    - target: {fileID: 1855023907875526405, guid: 1c866597374504a40840be7f143abb88, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
       objectReference: {fileID: 0}
-    - target: {fileID: 1855023907875526405, guid: 25aea0b7626cb4f439867fab15117ee7, type: 3}
+    - target: {fileID: 1855023907875526405, guid: 1c866597374504a40840be7f143abb88, type: 3}
       propertyPath: m_Pivot.y
       value: 0.5
       objectReference: {fileID: 0}
-    - target: {fileID: 1855023907875526405, guid: 25aea0b7626cb4f439867fab15117ee7, type: 3}
+    - target: {fileID: 1855023907875526405, guid: 1c866597374504a40840be7f143abb88, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1855023907875526405, guid: 25aea0b7626cb4f439867fab15117ee7, type: 3}
+    - target: {fileID: 1855023907875526405, guid: 1c866597374504a40840be7f143abb88, type: 3}
       propertyPath: m_AnchorMax.y
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 1855023907875526405, guid: 25aea0b7626cb4f439867fab15117ee7, type: 3}
+    - target: {fileID: 1855023907875526405, guid: 1c866597374504a40840be7f143abb88, type: 3}
       propertyPath: m_AnchorMin.x
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1855023907875526405, guid: 25aea0b7626cb4f439867fab15117ee7, type: 3}
+    - target: {fileID: 1855023907875526405, guid: 1c866597374504a40840be7f143abb88, type: 3}
       propertyPath: m_AnchorMin.y
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 1855023907875526405, guid: 25aea0b7626cb4f439867fab15117ee7, type: 3}
+    - target: {fileID: 1855023907875526405, guid: 1c866597374504a40840be7f143abb88, type: 3}
       propertyPath: m_SizeDelta.x
       value: 100
       objectReference: {fileID: 0}
-    - target: {fileID: 1855023907875526405, guid: 25aea0b7626cb4f439867fab15117ee7, type: 3}
+    - target: {fileID: 1855023907875526405, guid: 1c866597374504a40840be7f143abb88, type: 3}
       propertyPath: m_SizeDelta.y
       value: 100
       objectReference: {fileID: 0}
-    - target: {fileID: 1855023907875526405, guid: 25aea0b7626cb4f439867fab15117ee7, type: 3}
+    - target: {fileID: 1855023907875526405, guid: 1c866597374504a40840be7f143abb88, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1855023907875526405, guid: 25aea0b7626cb4f439867fab15117ee7, type: 3}
+    - target: {fileID: 1855023907875526405, guid: 1c866597374504a40840be7f143abb88, type: 3}
       propertyPath: m_LocalPosition.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1855023907875526405, guid: 25aea0b7626cb4f439867fab15117ee7, type: 3}
+    - target: {fileID: 1855023907875526405, guid: 1c866597374504a40840be7f143abb88, type: 3}
       propertyPath: m_LocalPosition.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1855023907875526405, guid: 25aea0b7626cb4f439867fab15117ee7, type: 3}
+    - target: {fileID: 1855023907875526405, guid: 1c866597374504a40840be7f143abb88, type: 3}
       propertyPath: m_LocalRotation.w
       value: 0.7071068
       objectReference: {fileID: 0}
-    - target: {fileID: 1855023907875526405, guid: 25aea0b7626cb4f439867fab15117ee7, type: 3}
+    - target: {fileID: 1855023907875526405, guid: 1c866597374504a40840be7f143abb88, type: 3}
       propertyPath: m_LocalRotation.x
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1855023907875526405, guid: 25aea0b7626cb4f439867fab15117ee7, type: 3}
+    - target: {fileID: 1855023907875526405, guid: 1c866597374504a40840be7f143abb88, type: 3}
       propertyPath: m_LocalRotation.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1855023907875526405, guid: 25aea0b7626cb4f439867fab15117ee7, type: 3}
+    - target: {fileID: 1855023907875526405, guid: 1c866597374504a40840be7f143abb88, type: 3}
       propertyPath: m_LocalRotation.z
       value: 0.7071068
       objectReference: {fileID: 0}
-    - target: {fileID: 1855023907875526405, guid: 25aea0b7626cb4f439867fab15117ee7, type: 3}
+    - target: {fileID: 1855023907875526405, guid: 1c866597374504a40840be7f143abb88, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 24
+      value: 27.590025
       objectReference: {fileID: 0}
-    - target: {fileID: 1855023907875526405, guid: 25aea0b7626cb4f439867fab15117ee7, type: 3}
+    - target: {fileID: 1855023907875526405, guid: 1c866597374504a40840be7f143abb88, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -7.9750977
+      value: -59.9
       objectReference: {fileID: 0}
-    - target: {fileID: 1855023907875526405, guid: 25aea0b7626cb4f439867fab15117ee7, type: 3}
+    - target: {fileID: 1855023907875526405, guid: 1c866597374504a40840be7f143abb88, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1855023907875526405, guid: 25aea0b7626cb4f439867fab15117ee7, type: 3}
+    - target: {fileID: 1855023907875526405, guid: 1c866597374504a40840be7f143abb88, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1855023907875526405, guid: 25aea0b7626cb4f439867fab15117ee7, type: 3}
+    - target: {fileID: 1855023907875526405, guid: 1c866597374504a40840be7f143abb88, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 90
-      objectReference: {fileID: 0}
-    - target: {fileID: 6122263408872831352, guid: 25aea0b7626cb4f439867fab15117ee7, type: 3}
-      propertyPath: m_Colors.m_NormalColor.b
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6122263408872831352, guid: 25aea0b7626cb4f439867fab15117ee7, type: 3}
-      propertyPath: m_Colors.m_NormalColor.g
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6122263408872831352, guid: 25aea0b7626cb4f439867fab15117ee7, type: 3}
-      propertyPath: m_Colors.m_NormalColor.r
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6122263408872831352, guid: 25aea0b7626cb4f439867fab15117ee7, type: 3}
-      propertyPath: m_Colors.m_PressedColor.b
-      value: 0.6226415
-      objectReference: {fileID: 0}
-    - target: {fileID: 6122263408872831352, guid: 25aea0b7626cb4f439867fab15117ee7, type: 3}
-      propertyPath: m_Colors.m_PressedColor.g
-      value: 0.6226415
-      objectReference: {fileID: 0}
-    - target: {fileID: 6122263408872831352, guid: 25aea0b7626cb4f439867fab15117ee7, type: 3}
-      propertyPath: m_Colors.m_PressedColor.r
-      value: 0.6226415
-      objectReference: {fileID: 0}
-    - target: {fileID: 6122263408872831352, guid: 25aea0b7626cb4f439867fab15117ee7, type: 3}
-      propertyPath: m_Colors.m_SelectedColor.b
-      value: 0.46226418
-      objectReference: {fileID: 0}
-    - target: {fileID: 6122263408872831352, guid: 25aea0b7626cb4f439867fab15117ee7, type: 3}
-      propertyPath: m_Colors.m_SelectedColor.g
-      value: 0.46226418
-      objectReference: {fileID: 0}
-    - target: {fileID: 6122263408872831352, guid: 25aea0b7626cb4f439867fab15117ee7, type: 3}
-      propertyPath: m_Colors.m_SelectedColor.r
-      value: 0.46226418
-      objectReference: {fileID: 0}
-    - target: {fileID: 6122263408872831352, guid: 25aea0b7626cb4f439867fab15117ee7, type: 3}
-      propertyPath: m_Colors.m_HighlightedColor.b
-      value: 0.5660378
-      objectReference: {fileID: 0}
-    - target: {fileID: 6122263408872831352, guid: 25aea0b7626cb4f439867fab15117ee7, type: 3}
-      propertyPath: m_Colors.m_HighlightedColor.g
-      value: 0.5660378
-      objectReference: {fileID: 0}
-    - target: {fileID: 6122263408872831352, guid: 25aea0b7626cb4f439867fab15117ee7, type: 3}
-      propertyPath: m_Colors.m_HighlightedColor.r
-      value: 0.5660378
-      objectReference: {fileID: 0}
-    - target: {fileID: 6122263408872831352, guid: 25aea0b7626cb4f439867fab15117ee7, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 6122263408872831352, guid: 25aea0b7626cb4f439867fab15117ee7, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: 
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 25aea0b7626cb4f439867fab15117ee7, type: 3}
---- !u!224 &1456106798846872257 stripped
-RectTransform:
-  m_CorrespondingSourceObject: {fileID: 1855023907875526405, guid: 25aea0b7626cb4f439867fab15117ee7, type: 3}
-  m_PrefabInstance: {fileID: 976013387643985348}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &6448548987316675772 stripped
+  m_SourcePrefab: {fileID: 100100000, guid: 1c866597374504a40840be7f143abb88, type: 3}
+--- !u!114 &653827948662175081 stripped
 MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 6122263408872831352, guid: 25aea0b7626cb4f439867fab15117ee7, type: 3}
-  m_PrefabInstance: {fileID: 976013387643985348}
+  m_CorrespondingSourceObject: {fileID: 6122263408872831352, guid: 1c866597374504a40840be7f143abb88, type: 3}
+  m_PrefabInstance: {fileID: 6765667970116455441}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
@@ -2488,6 +2411,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!224 &4925290126365465364 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 1855023907875526405, guid: 1c866597374504a40840be7f143abb88, type: 3}
+  m_PrefabInstance: {fileID: 6765667970116455441}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &8605359546969212746
 PrefabInstance:
   m_ObjectHideFlags: 0

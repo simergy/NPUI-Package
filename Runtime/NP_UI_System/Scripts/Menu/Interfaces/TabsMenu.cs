@@ -28,6 +28,11 @@ namespace NP_UI
             HideAndShowHeadLine(false);
         }
 
+        public bool GetIsOpen()
+        {
+            return isOpen;
+        }
+
         public override void OpenMenu()
         {
             SetTabsMenu();

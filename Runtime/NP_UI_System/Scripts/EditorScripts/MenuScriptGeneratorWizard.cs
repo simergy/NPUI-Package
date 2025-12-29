@@ -1,3 +1,4 @@
+#if UNITY_EDITOR
 using UnityEditor;
 using UnityEngine;
 using System.IO;
@@ -246,7 +247,7 @@ public class MenuScriptGeneratorWizard : EditorWindow
             return;
         }
         
-        MenuCreator menuCreator = FindObjectOfType<MenuCreator>();
+        MenuCreator menuCreator = FindObjectOfType<MenuCreator>(true);
         if (menuCreator == null)
         {
             EditorUtility.DisplayDialog("Error", "No 'MenuCreator' script found in the current scene. Please add one to a GameObject.\nCreating one.", "OK");
@@ -467,3 +468,4 @@ public class MenuScriptGeneratorWizard : EditorWindow
         }
     }
 }
+#endif

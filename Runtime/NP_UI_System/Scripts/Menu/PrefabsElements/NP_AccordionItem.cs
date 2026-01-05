@@ -47,6 +47,7 @@ public class NP_AccordionItem : NP_UIElements, ITextableElement, IClickableEleme
     private GridLayoutGroup _itemContentGrid;
     private Image _headerImage, _contentImage;
     private NP_Accordion _accordionContainer;
+    private Button arrowIconButton;
 
     
     #endregion
@@ -134,7 +135,7 @@ public class NP_AccordionItem : NP_UIElements, ITextableElement, IClickableEleme
         // Get button and add click listener
         if (arrowIcon != null)
         {
-            Button arrowIconButton = arrowIcon.GetComponent<Button>();
+            arrowIconButton = arrowIcon.GetComponent<Button>();
             if (arrowIconButton)
             {
                 arrowIconButton.onClick.AddListener(Toggle);
@@ -412,6 +413,26 @@ public class NP_AccordionItem : NP_UIElements, ITextableElement, IClickableEleme
             buttonHeader.onClick.RemoveAllListeners();
         }
         buttonHeader.onClick.AddListener(onClickAction);
+    }
+    public void RemoveListenersFromMainButton()
+    {
+        buttonHeader.onClick.RemoveAllListeners();
+    }
+    public void RemoveListenersFromMainButton(UnityAction onClickAction)
+    {
+        buttonHeader.onClick.RemoveListener(onClickAction);
+    }
+    public void RemoveListenersFromArrow()
+    {
+        arrowIconButton.onClick.RemoveAllListeners();
+    }
+    public void RemoveListenerFromArrow(UnityAction onClickAction)
+    {
+        arrowIconButton.onClick.RemoveListener(onClickAction);
+    }
+    public void AddArrowClick(UnityAction onClickAction)
+    {
+        arrowIconButton.onClick.AddListener(onClickAction);
     }
 
     /// <summary>

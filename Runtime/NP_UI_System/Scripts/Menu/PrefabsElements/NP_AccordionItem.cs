@@ -17,6 +17,7 @@ public class NP_AccordionItem : NP_UIElements, ITextableElement, IClickableEleme
     [SerializeField] private Transform itemContent;
     [SerializeField] private Button buttonHeader;
     [SerializeField] private Transform contentRawParent;
+    [SerializeField] private RawImage background;
 
 
     [Header("Settings")]
@@ -81,6 +82,8 @@ public class NP_AccordionItem : NP_UIElements, ITextableElement, IClickableEleme
         if (contentRawParent != null)
         {
             RectTransform rectTransform = contentRawParent.GetComponent<RectTransform>();
+           // VerticalLayoutGroup headerVertical = header.GetComponent<VerticalLayoutGroup>();
+            //headerVertical.padding.left = (int)(rectTransform.anchoredPosition.x + OffsetX * level);
             rectTransform.offsetMin = new Vector2(rectTransform.anchoredPosition.x + OffsetX * level, rectTransform.offsetMin.y);
         }
 
@@ -377,7 +380,11 @@ public class NP_AccordionItem : NP_UIElements, ITextableElement, IClickableEleme
     /// <inheritdoc />
     public void SetBackgroundColor(Color color)
     {
-        _headerImage.color = color;
+        background.color = color;
+    }
+    public void SetBackgroundImage(Texture texture)
+    {
+        background.texture = texture;
     }
 
     /// <inheritdoc />

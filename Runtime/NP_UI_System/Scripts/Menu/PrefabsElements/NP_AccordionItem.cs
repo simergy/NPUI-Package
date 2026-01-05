@@ -122,7 +122,7 @@ public class NP_AccordionItem : NP_UIElements, ITextableElement, IClickableEleme
             UpdateArrowRotation();
         }
     }
-
+    
     private void AddListeners()
     {
         // Get button if not initialized
@@ -442,6 +442,19 @@ public class NP_AccordionItem : NP_UIElements, ITextableElement, IClickableEleme
         arrowIconButton.onClick.AddListener(onClickAction);
     }
 
+    public void SetHeaderColorBlock(ColorBlock colorBlock)
+    {
+        SetButtonBlockColor(buttonHeader, colorBlock);
+    }
+    
+    public void SetArrowColorBlock(ColorBlock colorBlock)
+    {
+        SetButtonBlockColor(arrowIconButton, colorBlock);
+    }
+    private void SetButtonBlockColor(Button button, ColorBlock colorBlock)
+    {
+        button.colors = colorBlock;
+    }
     /// <summary>
     /// Sets the data for the parent accordion.
     /// </summary>

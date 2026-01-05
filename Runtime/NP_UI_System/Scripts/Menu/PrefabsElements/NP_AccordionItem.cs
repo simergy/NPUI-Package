@@ -186,7 +186,7 @@ public class NP_AccordionItem : NP_UIElements, ITextableElement, IClickableEleme
         _accordionContainer.RebuildLayout();
     }
 
-    private void ToggleElementsAppearance()
+    public void ToggleElementsAppearance()
     {
         if (itemContent.childCount == 0)
         {

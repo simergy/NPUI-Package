@@ -213,33 +213,14 @@ public class NP_AccordionItem : NP_UIElements, ITextableElement, IClickableEleme
         gridLayoutGroup.padding.left = ((int)OffsetX-5)* level;
     }
 
-    //To be used
-    private void HandleColorsManagement(Transform contentTransform, Transform headerTransform)
-    {
-        if (contentTransform.gameObject.activeSelf)
-        {
-            _headerImage.color = Color.gray;
-            _contentImage.color = Color.gray;
-        }
-        else
-        {
-            _headerImage.color = Color.white;
-            _contentImage.color = Color.white;
-        }
-    }
 
     private void UpdateColor()
     {
-        var colorBlock = buttonHeader.colors;
+        //var colorBlock = buttonHeader.colors;
         if (parentAccordion != null)
         {
-            colorBlock.normalColor = parentAccordion.buttonHeader.colors.highlightedColor;
+            SetBackgroundColor(parentAccordion.background.color);
         }
-        else
-        {
-            colorBlock.normalColor = colorBlock.highlightedColor;
-        }
-        buttonHeader.colors = colorBlock;
     }
 
     private void UpdateChildrenVisibility()
@@ -454,6 +435,12 @@ public class NP_AccordionItem : NP_UIElements, ITextableElement, IClickableEleme
     private void SetButtonBlockColor(Button button, ColorBlock colorBlock)
     {
         button.colors = colorBlock;
+    }
+
+    public void SetSameColorBlockForArrowAndHeader(ColorBlock colorBlock)
+    {
+        SetHeaderColorBlock(colorBlock);
+        SetArrowColorBlock(colorBlock);
     }
     /// <summary>
     /// Sets the data for the parent accordion.

@@ -6,6 +6,7 @@ using System.Linq;
 using System;
 using System.Text.RegularExpressions;
 using NP_UI;
+using UnityEngine.EventSystems;
 
 public class MenuScriptGeneratorWizard : EditorWindow
 {
@@ -250,11 +251,20 @@ public class MenuScriptGeneratorWizard : EditorWindow
         MenuCreator menuCreator = FindObjectOfType<MenuCreator>(true);
         if (menuCreator == null)
         {
-            EditorUtility.DisplayDialog("Error", "No 'MenuCreator' script found in the current scene. Please add one to a GameObject.\nCreating one.", "OK");
+            EditorUtility.DisplayDialog("Error", "No 'MenuCreator' script found in the current scene.\nCreating one.", "OK");
             Debug.Log("MenuScriptGeneratorWizard: No MenuCreator found in scene for registration. Creating it first.");
 
             GameObject menuCreatorGO = Resources.Load<GameObject>("Localizations/GeneralScripts");
             menuCreator = Instantiate(menuCreatorGO).GetComponentInChildren<MenuCreator>();
+            
+            if (FindFirstObjectByType<EventSystem>() == null)
+            {
+                GameObject eventSystem = new GameObject("EventSystem");
+                eventSystem.AddComponent<EventSystem>();
+                eventSystem.AddComponent<StandaloneInputModule>();
+
+                Debug.Log("[NP_UIPackage] No EventSystem found. One has been automatically created for you.");
+            }
         }
         
         SerializableType newMenuSerializableType = new SerializableType (menuTypeToRegister);

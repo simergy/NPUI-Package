@@ -1,8 +1,6 @@
 using UnityEngine;
-using System;
 using System.Collections.Generic;
 using NP_UI;
-using NUnit.Framework; // For Type
 
 public class MenuCreator : MonoBehaviour
 {

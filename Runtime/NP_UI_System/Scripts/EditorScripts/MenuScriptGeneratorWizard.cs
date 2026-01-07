@@ -256,15 +256,15 @@ public class MenuScriptGeneratorWizard : EditorWindow
 
             GameObject menuCreatorGO = Resources.Load<GameObject>("Localizations/GeneralScripts");
             menuCreator = Instantiate(menuCreatorGO).GetComponentInChildren<MenuCreator>();
-            
-            if (FindFirstObjectByType<EventSystem>() == null)
-            {
-                GameObject eventSystem = new GameObject("EventSystem");
-                eventSystem.AddComponent<EventSystem>();
-                eventSystem.AddComponent<StandaloneInputModule>();
+        }
+        
+        if (FindObjectOfType<EventSystem>() == null)
+        {
+            GameObject eventSystem = new GameObject("EventSystem");
+            eventSystem.AddComponent<EventSystem>();
+            eventSystem.AddComponent<StandaloneInputModule>();
 
-                Debug.Log("[NP_UIPackage] No EventSystem found. One has been automatically created for you.");
-            }
+            Debug.Log("[NP_UIPackage] No EventSystem found. One has been automatically created for you.");
         }
         
         SerializableType newMenuSerializableType = new SerializableType (menuTypeToRegister);

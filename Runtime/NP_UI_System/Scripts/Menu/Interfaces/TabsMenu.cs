@@ -293,34 +293,24 @@ namespace NP_UI
         private Vector2 GetDirection(MenuData menuData)
         {
             UIMenuGenerator.MenuAlignment alignment = menuData.Alignment;
-            bool isLeftDirection = alignment is UIMenuGenerator.MenuAlignment.Left
-                or UIMenuGenerator.MenuAlignment.LeftSide;
-            bool isDownDirection = alignment is UIMenuGenerator.MenuAlignment.Bottom
-                or UIMenuGenerator.MenuAlignment.BottomPanel
-                or UIMenuGenerator.MenuAlignment.BottomCenter;
-            bool isRightDirection = alignment is UIMenuGenerator.MenuAlignment.Right
-                or UIMenuGenerator.MenuAlignment.RightSide;
-            bool isUpDirection = alignment is UIMenuGenerator.MenuAlignment.Top
-                or UIMenuGenerator.MenuAlignment.TopPanel
-                or UIMenuGenerator.MenuAlignment.TopCenter;
 
-            if (isLeftDirection)
-            {
-                return Vector2.left;
-            }
+            // In C# 8, we use standard logical OR (||) and equality operators (==)
+            bool isLeftDirection = alignment == UIMenuGenerator.MenuAlignment.Left
+                                   || alignment == UIMenuGenerator.MenuAlignment.LeftSide;
 
-            if (isDownDirection)
-            {
-                return Vector2.down;
-            }
+            bool isDownDirection = alignment == UIMenuGenerator.MenuAlignment.Bottom
+                                   || alignment == UIMenuGenerator.MenuAlignment.BottomPanel
+                                   || alignment == UIMenuGenerator.MenuAlignment.BottomCenter;
 
-            if (isRightDirection)
-            {
-                return Vector2.right;
-            }
+            bool isRightDirection = alignment == UIMenuGenerator.MenuAlignment.Right
+                                    || alignment == UIMenuGenerator.MenuAlignment.RightSide;
+
+            // We can skip the bool check for Up and just return it as the default
+            if (isLeftDirection) return Vector2.left;
+            if (isDownDirection) return Vector2.down;
+            if (isRightDirection) return Vector2.right;
 
             return Vector2.up;
-
         }
 
         protected void Initialize()

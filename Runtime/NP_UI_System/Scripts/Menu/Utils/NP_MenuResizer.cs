@@ -84,24 +84,26 @@ namespace NP_UI
         
         private Vector2 CalculateNewSize(Vector2 currentPointerPos)
         {
-            // 1. Calculate how far the mouse has moved from the start
             Vector2 pointerDelta = currentPointerPos - _initialPointerPos;
-
-            // 2. Adjust for Pivot
-            // If pivot is center (0.5), expansion happens on both sides, so we double the delta.
-            float pivotXMultiplier = (_target.pivot.x == 0.5f) ? 2.0f : 1.0f;
-            float pivotYMultiplier = (_target.pivot.y == 0.5f) ? 2.0f : 1.0f;
-
             Vector2 calculatedSize = _initialSize;
 
-            // 3. Apply axis-specific movement
-            if (_settings.AllowX) 
-                calculatedSize.x = _initialSize.x + (pointerDelta.x * pivotXMultiplier);
+            // Pivot multipliers (doubles delta if pivot is centered)
+            float multX = (_target.pivot.x == 0.5f) ? 2.0f : 1.0f;
+            float multY = (_target.pivot.y == 0.5f) ? 2.0f : 1.0f;
 
-            if (_settings.AllowY) 
-                calculatedSize.y = _initialSize.y - (pointerDelta.y * pivotYMultiplier);
+            // Horizontal Resizing
+            if (_settings.CanResizeRight) 
+                calculatedSize.x = _initialSize.x + (pointerDelta.x * multX);
+            else if (_settings.CanResizeLeft) 
+                calculatedSize.x = _initialSize.x - (pointerDelta.x * multX); // Inverted for left side
 
-            // 4. Apply pixel-based constraints
+            // Vertical Resizing
+            if (_settings.CanResizeBottom) 
+                calculatedSize.y = _initialSize.y - (pointerDelta.y * multY);
+            else if (_settings.CanResizeTop) 
+                calculatedSize.y = _initialSize.y + (pointerDelta.y * multY); // Inverted for top side
+
+            // Apply pixel-based constraints
             calculatedSize.x = Mathf.Clamp(calculatedSize.x, _minSizePixels.x, _maxSizePixels.x);
             calculatedSize.y = Mathf.Clamp(calculatedSize.y, _minSizePixels.y, _maxSizePixels.y);
 
@@ -140,8 +142,8 @@ namespace NP_UI
     [Serializable]
     public struct ResizeSettings
     {
-        public bool AllowX;
-        public bool AllowY;
+        public bool CanResizeLeft, CanResizeRight;
+        public bool CanResizeTop, CanResizeBottom;
         public Vector2 MinPercent;
         public Vector2 MaxPercent;
     }

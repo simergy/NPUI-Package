@@ -97,27 +97,69 @@ public static class UIMenuGenerator
 
     private static void AddResizeHandle(GameObject menuRoot, MenuData data)
     {
-        if (!data.AllowResizeX && !data.AllowResizeY)
+        if (data.AllowResizeX)
         {
-            return;
+            CreateEdgeHandle(menuRoot, data, true, true);  // Right Edge
+            CreateEdgeHandle(menuRoot, data, true, false); // Left Edge
         }
-
-        // 1. Create Handle
-        GameObject handleGO = CreateHandleGameObject(menuRoot);
-    
-        // 2. Position at bottom-right corner
-        PositionHandle(handleGO, data);
-        
-        // 3. Must have an Image with alpha for raycasting to work
-        SetAnImage(handleGO);
-
-        // 4. Initialize and target the menuRoot
-        AddAndInitializeResizer(handleGO,menuRoot, data);
+        if (data.AllowResizeY)
+        {
+            CreateEdgeHandle(menuRoot, data, false, true);  // Top Edge
+            CreateEdgeHandle(menuRoot, data, false, false); // Bottom Edge
+        }
     }
 
+    private static void CreateEdgeHandle(GameObject menuRoot, MenuData data, bool isVertical, bool isPositiveSide)
+    {
+        GameObject handleGO = new GameObject(isVertical ? "EdgeHandle_V" : "EdgeHandle_H");
+        handleGO.transform.SetParent(menuRoot.transform, false);
+        RectTransform rect = handleGO.AddComponent<RectTransform>();
+
+        if (isVertical) // Left or Right edges
+        {
+            float xAnchor = isPositiveSide ? 1 : 0; // 1 for Right, 0 for Left
+            rect.anchorMin = new Vector2(xAnchor, 0); // Stretch vertically
+            rect.anchorMax = new Vector2(xAnchor, 1);
+            rect.pivot = new Vector2(xAnchor, 0.5f);
+            rect.sizeDelta = new Vector2(10, 0); // 10 pixels wide, full height
+        }
+        else // Top or Bottom edges
+        {
+            float yAnchor = isPositiveSide ? 1 : 0; // 1 for Top, 0 for Bottom
+            rect.anchorMin = new Vector2(0, yAnchor); // Stretch horizontally
+            rect.anchorMax = new Vector2(1, yAnchor);
+            rect.pivot = new Vector2(0.5f, yAnchor);
+            rect.sizeDelta = new Vector2(0, 10); // Full width, 10 pixels high
+        }
+
+        ConfigureResizerForEdge(handleGO, menuRoot, data, isVertical, isPositiveSide);
+    }
+    private static void ConfigureResizerForEdge(GameObject handleGO, GameObject menuRoot, MenuData data, bool isVertical, bool isPositiveSide)
+    {
+        handleGO.AddComponent<Image>().color = new Color(0, 0, 0, 0);
+        var resizer = handleGO.AddComponent<NP_MenuResizer>();
+
+        ResizeSettings settings = new ResizeSettings
+        {
+            CanResizeRight = isVertical && isPositiveSide,
+            CanResizeLeft = isVertical && !isPositiveSide,
+            CanResizeTop = !isVertical && isPositiveSide,
+            CanResizeBottom = !isVertical && !isPositiveSide,
+            MinPercent = data.MinSizePercent,
+            MaxPercent = data.MaxSizePercent
+        };
+
+        resizer.Setup(menuRoot.GetComponent<RectTransform>(), settings, CreateResizeCallback(menuRoot));
+    }
     private static void PositionHandle(GameObject handleGO, MenuData data)
     {
         RectTransform handleRect = handleGO.AddComponent<RectTransform>();
+
+        Vector2 anchorMin;
+        Vector2 anchorMax;
+        Vector2 pivot;
+        Vector2 sizeDelta;
+        
         handleRect.anchorMin = new Vector2(1, 0);
         handleRect.anchorMax = new Vector2(1, 1);
         handleRect.pivot = new Vector2(1, 0.5f);
@@ -185,17 +227,42 @@ public static class UIMenuGenerator
         };
     }
     
+    /// <summary>
+    /// Maps MenuData configuration to the modular ResizeSettings struct.
+    /// </summary>
     private static ResizeSettings CreateResizeSettings(MenuData data)
     {
         return new ResizeSettings
         {
-            AllowX = data.AllowResizeX,
-            AllowY = data.AllowResizeY,
+            // Permission flags to determine which axes are unlocked
+            // Currently mapped to your data's general AllowResizeX/Y booleans
+            CanResizeLeft = data.AllowResizeX,
+            CanResizeRight = data.AllowResizeX,
+            CanResizeTop = data.AllowResizeY,
+            CanResizeBottom = data.AllowResizeY,
+
+            // Resolution-independent constraints (Screen Percentages 0.0 - 1.0)
             MinPercent = data.MinSizePercent,
             MaxPercent = data.MaxSizePercent
         };
     }
 
+    private static void CreateHandle(GameObject menuRoot, MenuData data, Vector2 anchor, ResizeSettings sideSettings)
+    {
+        GameObject handleGO = new GameObject("ResizeHandle_" + anchor.ToString());
+        handleGO.transform.SetParent(menuRoot.transform, false);
+    
+        RectTransform rect = handleGO.AddComponent<RectTransform>();
+        rect.anchorMin = rect.anchorMax = rect.pivot = anchor; // Position at specific corner/edge
+        rect.sizeDelta = new Vector2(30, 30);
+
+        // Add Image for raycast and Resizer component
+        handleGO.AddComponent<Image>().color = new Color(0,0,0,0);
+    
+        var resizer = handleGO.AddComponent<NP_MenuResizer>();
+        resizer.Setup(menuRoot.GetComponent<RectTransform>(), sideSettings, CreateResizeCallback(menuRoot));
+    }
+    
     private static GameObject CreateHandleGameObject(GameObject menuRoot)
     {
         GameObject handleGO = new GameObject("ResizeHandle");

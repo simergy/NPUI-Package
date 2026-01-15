@@ -51,223 +51,123 @@ public static class UIMenuGenerator
     /// <returns>The root GameObject of the generated menu, or null if creation fails.</returns>
     public static NpGenericMenu CreateScrollableGridMenu(MenuData config)
     {
-        // --- 1. Validate parameters ---
-        float actualScreenCoveragePercent = config.ScreenCoveragePercent; // Use a local variable to allow modification
+        float actualScreenCoveragePercent = config.ScreenCoveragePercent;
         if (!ValidateParameters(config.ParentCanvas, ref actualScreenCoveragePercent)) return null;
 
-        // --- 2. Create Root Menu GameObject ---
         GameObject rootMenuGO = CreateRootMenu(config);
-
         if (rootMenuGO == null) return null;
-        RectTransform menuRootRect = rootMenuGO.GetComponent<RectTransform>();
 
-        // --- 3. Create Viewport and Content GameObjects ---
+        RectTransform menuRootRect = rootMenuGO.GetComponent<RectTransform>();
         RectTransform viewportRect = CreateViewport(rootMenuGO, config.ViewportBackgroundColor);
         RectTransform contentRect = CreateContent(rootMenuGO.GetComponent<NP_Menu>(), viewportRect);
 
-        // --- 4. Add and Configure ScrollRect ---
-        ScrollRect
-            scrollRect =
-                rootMenuGO
-                    .GetComponentInChildren<
-                        ScrollRect>(); //AddScrollRect(rootMenuGO, viewportRect, contentRect, config.LayoutType);
-
-        NP_Menu npMenu = rootMenuGO.GetComponent<NP_Menu>();
-
-        // --- 5. Add and Configure ContentSizeFitter ---
         AddContentSizeFitter(contentRect, config.LayoutType);
-
-        // --- 6. Add and Configure GridLayoutGroup ---
         AddGridLayoutGroup(config, contentRect);
 
-        //Just For Example!
-        // --- 7. Populate with example items ---
-        //PopulateMenuItems(contentRect, config.ItemCount, config.ItemBackgroundColor, config.ItemTextColor);
+        NP_Menu npMenu = rootMenuGO.GetComponent<NP_Menu>();
         SetFields(config, npMenu);
         ApplyComponent(config, rootMenuGO);
         SetColors(config, npMenu);
-        // --- 8. Force Layout Rebuilds ---
+
         ForceRebuildLayouts(menuRootRect, viewportRect, contentRect);
-        AddResizeHandle(rootMenuGO, config);
+        
+        // Orchestrate the creation of resizing handles
+        AddResizeHandles(rootMenuGO, config); 
 
         rootMenuGO.SetActive(config.IsAlwaysOn);
-
         return rootMenuGO.GetComponent<NpGenericMenu>();
     }
 
-    private static void AddResizeHandle(GameObject menuRoot, MenuData data)
+    // --- Modular Resizing Handle Logic ---
+
+    private static void AddResizeHandles(GameObject menuRoot, MenuData data)
     {
+        if (!data.AllowResizeX && !data.AllowResizeY) return;
+
+        // Create modular settings and callbacks
+        ResizeSettings settings = CreateResizeSettings(data);
+        Action<Vector2> onResizeAction = CreateResizeCallback(menuRoot, data);
+
+        // Generate Edge Handles based on permissions
         if (data.AllowResizeX)
         {
-            CreateEdgeHandle(menuRoot, data, true, true);  // Right Edge
-            CreateEdgeHandle(menuRoot, data, true, false); // Left Edge
+            CreateEdgeHandle(menuRoot, settings, onResizeAction, true, true);  // Right
+            CreateEdgeHandle(menuRoot, settings, onResizeAction, true, false); // Left
         }
         if (data.AllowResizeY)
         {
-            CreateEdgeHandle(menuRoot, data, false, true);  // Top Edge
-            CreateEdgeHandle(menuRoot, data, false, false); // Bottom Edge
+            CreateEdgeHandle(menuRoot, settings, onResizeAction, false, true);  // Top
+            CreateEdgeHandle(menuRoot, settings, onResizeAction, false, false); // Bottom
         }
     }
 
-    private static void CreateEdgeHandle(GameObject menuRoot, MenuData data, bool isVertical, bool isPositiveSide)
+    private static void CreateEdgeHandle(GameObject menuRoot, ResizeSettings globalSettings, Action<Vector2> callback, bool isVertical, bool isPositiveSide)
     {
         GameObject handleGO = new GameObject(isVertical ? "EdgeHandle_V" : "EdgeHandle_H");
         handleGO.transform.SetParent(menuRoot.transform, false);
+        
         RectTransform rect = handleGO.AddComponent<RectTransform>();
+        ConfigureHandleAnchors(rect, isVertical, isPositiveSide);
 
-        if (isVertical) // Left or Right edges
-        {
-            float xAnchor = isPositiveSide ? 1 : 0; // 1 for Right, 0 for Left
-            rect.anchorMin = new Vector2(xAnchor, 0); // Stretch vertically
-            rect.anchorMax = new Vector2(xAnchor, 1);
-            rect.pivot = new Vector2(xAnchor, 0.5f);
-            rect.sizeDelta = new Vector2(10, 0); // 10 pixels wide, full height
-        }
-        else // Top or Bottom edges
-        {
-            float yAnchor = isPositiveSide ? 1 : 0; // 1 for Top, 0 for Bottom
-            rect.anchorMin = new Vector2(0, yAnchor); // Stretch horizontally
-            rect.anchorMax = new Vector2(1, yAnchor);
-            rect.pivot = new Vector2(0.5f, yAnchor);
-            rect.sizeDelta = new Vector2(0, 10); // Full width, 10 pixels high
-        }
+        // Create specific settings for this edge
+        ResizeSettings edgeSettings = globalSettings; 
+        edgeSettings.CanResizeRight = isVertical && isPositiveSide;
+        edgeSettings.CanResizeLeft = isVertical && !isPositiveSide;
+        edgeSettings.CanResizeTop = !isVertical && isPositiveSide;
+        edgeSettings.CanResizeBottom = !isVertical && !isPositiveSide;
 
-        ConfigureResizerForEdge(handleGO, menuRoot, data, isVertical, isPositiveSide);
-    }
-    private static void ConfigureResizerForEdge(GameObject handleGO, GameObject menuRoot, MenuData data, bool isVertical, bool isPositiveSide)
-    {
         handleGO.AddComponent<Image>().color = new Color(0, 0, 0, 0);
         var resizer = handleGO.AddComponent<NP_MenuResizer>();
+        resizer.Setup(menuRoot.GetComponent<RectTransform>(), edgeSettings, callback);
+    }
 
-        ResizeSettings settings = new ResizeSettings
+    private static void ConfigureHandleAnchors(RectTransform rect, bool isVertical, bool isPositiveSide)
+    {
+        if (isVertical) // Left/Right
         {
-            CanResizeRight = isVertical && isPositiveSide,
-            CanResizeLeft = isVertical && !isPositiveSide,
-            CanResizeTop = !isVertical && isPositiveSide,
-            CanResizeBottom = !isVertical && !isPositiveSide,
+            float x = isPositiveSide ? 1 : 0;
+            rect.anchorMin = new Vector2(x, 0);
+            rect.anchorMax = new Vector2(x, 1);
+            rect.pivot = new Vector2(x, 0.5f);
+            rect.sizeDelta = new Vector2(10, 0);
+        }
+        else // Top/Bottom
+        {
+            float y = isPositiveSide ? 1 : 0;
+            rect.anchorMin = new Vector2(0, y);
+            rect.anchorMax = new Vector2(1, y);
+            rect.pivot = new Vector2(0.5f, y);
+            rect.sizeDelta = new Vector2(0, 10);
+        }
+    }
+
+    private static ResizeSettings CreateResizeSettings(MenuData data)
+    {
+        return new ResizeSettings
+        {
             MinPercent = data.MinSizePercent,
             MaxPercent = data.MaxSizePercent
         };
-
-        resizer.Setup(menuRoot.GetComponent<RectTransform>(), settings, CreateResizeCallback(menuRoot));
-    }
-    private static void PositionHandle(GameObject handleGO, MenuData data)
-    {
-        RectTransform handleRect = handleGO.AddComponent<RectTransform>();
-
-        Vector2 anchorMin;
-        Vector2 anchorMax;
-        Vector2 pivot;
-        Vector2 sizeDelta;
-        
-        handleRect.anchorMin = new Vector2(1, 0);
-        handleRect.anchorMax = new Vector2(1, 1);
-        handleRect.pivot = new Vector2(1, 0.5f);
-        handleRect.sizeDelta = new Vector2(20, 0);
-
-        if (handleGO.transform.parent != null)
-        {
-            NpGenericMenu menu = handleGO.transform.parent.GetComponent<NpGenericMenu>();
-            if (menu != null)
-            {
-                RectTransform rectTransform = menu.npMenu.scrollRect.GetComponent<RectTransform>();
-                rectTransform.pivot = new Vector2(0, 1);
-            }
-        }
-        
     }
 
-    private static void SetAnImage(GameObject handleGO)
-    {
-        Image img = handleGO.AddComponent<Image>();
-        img.color = new Color(1, 1, 1, 0f); // Make it slightly visible to test
-    }
-
-    private static void AddAndInitializeResizer(GameObject handleGO, GameObject menuRoot, MenuData data)
-    {
-        // 1. Create the settings object from raw data
-        ResizeSettings settings = CreateResizeSettings(data);
-
-        // 2. Define how the menu should react to resizing
-        Action<Vector2> onResizeAction = CreateResizeCallback(menuRoot);
-
-        // 3. Attach and configure the resizer component
-        ConfigureResizerComponent(handleGO, menuRoot, settings, onResizeAction);
-    }
-    
-    private static void ConfigureResizerComponent(GameObject handleGO, GameObject menuRoot, ResizeSettings settings, Action<Vector2> callback)
-    {
-        var resizer = handleGO.AddComponent<NP_MenuResizer>();
-    
-        resizer.Setup(
-            menuRoot.GetComponent<RectTransform>(),
-            settings, 
-            callback
-        );
-    }
-    
-    private static Action<Vector2> CreateResizeCallback(GameObject menuRoot)
+    private static Action<Vector2> CreateResizeCallback(GameObject menuRoot, MenuData data)
     {
         return (newSize) => 
         {
             NpGenericMenu menu = menuRoot.GetComponent<NpGenericMenu>();
             if (menu == null) return;
 
-            // Sync Grid cell size
+            // Conditional Cell Resizing
             GridLayoutGroup grid = menu.GetGridLayoutGroup();
-            if (grid != null)
+            if (grid != null && data.ShouldResizeCells)
             {
                 float paddingX = grid.padding.left + grid.padding.right;
                 grid.cellSize = new Vector2(newSize.x - paddingX, grid.cellSize.y);
             }
-        
-            // Refresh Accordion layout if present
+            
             NP_Accordion accordion = menuRoot.GetComponentInChildren<NP_Accordion>();
             accordion?.RebuildLayout();
         };
-    }
-    
-    /// <summary>
-    /// Maps MenuData configuration to the modular ResizeSettings struct.
-    /// </summary>
-    private static ResizeSettings CreateResizeSettings(MenuData data)
-    {
-        return new ResizeSettings
-        {
-            // Permission flags to determine which axes are unlocked
-            // Currently mapped to your data's general AllowResizeX/Y booleans
-            CanResizeLeft = data.AllowResizeX,
-            CanResizeRight = data.AllowResizeX,
-            CanResizeTop = data.AllowResizeY,
-            CanResizeBottom = data.AllowResizeY,
-
-            // Resolution-independent constraints (Screen Percentages 0.0 - 1.0)
-            MinPercent = data.MinSizePercent,
-            MaxPercent = data.MaxSizePercent
-        };
-    }
-
-    private static void CreateHandle(GameObject menuRoot, MenuData data, Vector2 anchor, ResizeSettings sideSettings)
-    {
-        GameObject handleGO = new GameObject("ResizeHandle_" + anchor.ToString());
-        handleGO.transform.SetParent(menuRoot.transform, false);
-    
-        RectTransform rect = handleGO.AddComponent<RectTransform>();
-        rect.anchorMin = rect.anchorMax = rect.pivot = anchor; // Position at specific corner/edge
-        rect.sizeDelta = new Vector2(30, 30);
-
-        // Add Image for raycast and Resizer component
-        handleGO.AddComponent<Image>().color = new Color(0,0,0,0);
-    
-        var resizer = handleGO.AddComponent<NP_MenuResizer>();
-        resizer.Setup(menuRoot.GetComponent<RectTransform>(), sideSettings, CreateResizeCallback(menuRoot));
-    }
-    
-    private static GameObject CreateHandleGameObject(GameObject menuRoot)
-    {
-        GameObject handleGO = new GameObject("ResizeHandle");
-        handleGO.transform.SetParent(menuRoot.transform, false);
-        return handleGO;
     }
     
     private static void SetColors(MenuData config, NP_Menu menu)

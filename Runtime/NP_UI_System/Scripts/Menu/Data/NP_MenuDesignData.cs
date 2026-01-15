@@ -196,6 +196,12 @@ public class NP_MenuDesignData : Singleton<NP_MenuDesignData>
             // (which is the rootAccordionItem's transform in this flat hierarchy)
             RectTransform rectTransform = rootAccordionEnvironment.ContentTransform.GetComponent<RectTransform>();
             rectTransform.rect.Set(200,100,200,100);
+            
+            RectTransform rectTransformOfScroll = rootAccordionEnvironment.ScrollRect.GetComponent<RectTransform>();
+            if (rectTransformOfScroll != null)
+            {
+                rectTransformOfScroll.pivot = rootAccordionData.PivotScaling;
+            }
             BuildAccordionChildren(rootAccordionData.AccordionChildren, 1, null, rootAccordionEnvironment, 0);
         }
         

@@ -88,12 +88,121 @@ public static class UIMenuGenerator
         SetColors(config, npMenu);
         // --- 8. Force Layout Rebuilds ---
         ForceRebuildLayouts(menuRootRect, viewportRect, contentRect);
+        AddResizeHandle(rootMenuGO, config);
 
         rootMenuGO.SetActive(config.IsAlwaysOn);
-        
+
         return rootMenuGO.GetComponent<NpGenericMenu>();
     }
 
+    private static void AddResizeHandle(GameObject menuRoot, MenuData data)
+    {
+        if (!data.AllowResizeX && !data.AllowResizeY)
+        {
+            return;
+        }
+
+        // 1. Create Handle
+        GameObject handleGO = CreateHandleGameObject(menuRoot);
+    
+        // 2. Position at bottom-right corner
+        PositionHandle(handleGO, data);
+        
+        // 3. Must have an Image with alpha for raycasting to work
+        SetAnImage(handleGO);
+
+        // 4. Initialize and target the menuRoot
+        AddAndInitializeResizer(handleGO,menuRoot, data);
+    }
+
+    private static void PositionHandle(GameObject handleGO, MenuData data)
+    {
+        RectTransform handleRect = handleGO.AddComponent<RectTransform>();
+        handleRect.anchorMin = new Vector2(1, 0);
+        handleRect.anchorMax = new Vector2(1, 1);
+        handleRect.pivot = new Vector2(1, 0.5f);
+        handleRect.sizeDelta = new Vector2(20, 0);
+
+        if (handleGO.transform.parent != null)
+        {
+            NpGenericMenu menu = handleGO.transform.parent.GetComponent<NpGenericMenu>();
+            if (menu != null)
+            {
+                RectTransform rectTransform = menu.npMenu.scrollRect.GetComponent<RectTransform>();
+                rectTransform.pivot = new Vector2(0, 1);
+            }
+        }
+        
+    }
+
+    private static void SetAnImage(GameObject handleGO)
+    {
+        Image img = handleGO.AddComponent<Image>();
+        img.color = new Color(1, 1, 1, 0f); // Make it slightly visible to test
+    }
+
+    private static void AddAndInitializeResizer(GameObject handleGO, GameObject menuRoot, MenuData data)
+    {
+        // 1. Create the settings object from raw data
+        ResizeSettings settings = CreateResizeSettings(data);
+
+        // 2. Define how the menu should react to resizing
+        Action<Vector2> onResizeAction = CreateResizeCallback(menuRoot);
+
+        // 3. Attach and configure the resizer component
+        ConfigureResizerComponent(handleGO, menuRoot, settings, onResizeAction);
+    }
+    
+    private static void ConfigureResizerComponent(GameObject handleGO, GameObject menuRoot, ResizeSettings settings, Action<Vector2> callback)
+    {
+        var resizer = handleGO.AddComponent<NP_MenuResizer>();
+    
+        resizer.Setup(
+            menuRoot.GetComponent<RectTransform>(),
+            settings, 
+            callback
+        );
+    }
+    
+    private static Action<Vector2> CreateResizeCallback(GameObject menuRoot)
+    {
+        return (newSize) => 
+        {
+            NpGenericMenu menu = menuRoot.GetComponent<NpGenericMenu>();
+            if (menu == null) return;
+
+            // Sync Grid cell size
+            GridLayoutGroup grid = menu.GetGridLayoutGroup();
+            if (grid != null)
+            {
+                float paddingX = grid.padding.left + grid.padding.right;
+                grid.cellSize = new Vector2(newSize.x - paddingX, grid.cellSize.y);
+            }
+        
+            // Refresh Accordion layout if present
+            NP_Accordion accordion = menuRoot.GetComponentInChildren<NP_Accordion>();
+            accordion?.RebuildLayout();
+        };
+    }
+    
+    private static ResizeSettings CreateResizeSettings(MenuData data)
+    {
+        return new ResizeSettings
+        {
+            AllowX = data.AllowResizeX,
+            AllowY = data.AllowResizeY,
+            MinPercent = data.MinSizePercent,
+            MaxPercent = data.MaxSizePercent
+        };
+    }
+
+    private static GameObject CreateHandleGameObject(GameObject menuRoot)
+    {
+        GameObject handleGO = new GameObject("ResizeHandle");
+        handleGO.transform.SetParent(menuRoot.transform, false);
+        return handleGO;
+    }
+    
     private static void SetColors(MenuData config, NP_Menu menu)
     {
         if (menu == null)

@@ -17,6 +17,7 @@ public class NP_AccordionItem : NP_UIElements, ITextableElement, IClickableEleme
     [SerializeField] private Transform itemContent;
     [SerializeField] private Button buttonHeader;
     [SerializeField] private Transform contentRawParent;
+    [SerializeField] private RawImage background;
 
 
     [Header("Settings")]
@@ -47,6 +48,7 @@ public class NP_AccordionItem : NP_UIElements, ITextableElement, IClickableEleme
     private GridLayoutGroup _itemContentGrid;
     private Image _headerImage, _contentImage;
     private NP_Accordion _accordionContainer;
+    private Button arrowIconButton;
 
     
     #endregion
@@ -118,7 +120,7 @@ public class NP_AccordionItem : NP_UIElements, ITextableElement, IClickableEleme
             UpdateArrowRotation();
         }
     }
-
+    
     private void AddListeners()
     {
         // Get button if not initialized
@@ -134,7 +136,7 @@ public class NP_AccordionItem : NP_UIElements, ITextableElement, IClickableEleme
         // Get button and add click listener
         if (arrowIcon != null)
         {
-            Button arrowIconButton = arrowIcon.GetComponent<Button>();
+            arrowIconButton = arrowIcon.GetComponent<Button>();
             if (arrowIconButton)
             {
                 arrowIconButton.onClick.AddListener(Toggle);
@@ -185,7 +187,7 @@ public class NP_AccordionItem : NP_UIElements, ITextableElement, IClickableEleme
         _accordionContainer.RebuildLayout();
     }
 
-    private void ToggleElementsAppearance()
+    public void ToggleElementsAppearance()
     {
         if (itemContent.childCount == 0)
         {
@@ -209,33 +211,13 @@ public class NP_AccordionItem : NP_UIElements, ITextableElement, IClickableEleme
         gridLayoutGroup.padding.left = ((int)OffsetX-5)* level;
     }
 
-    //To be used
-    private void HandleColorsManagement(Transform contentTransform, Transform headerTransform)
-    {
-        if (contentTransform.gameObject.activeSelf)
-        {
-            _headerImage.color = Color.gray;
-            _contentImage.color = Color.gray;
-        }
-        else
-        {
-            _headerImage.color = Color.white;
-            _contentImage.color = Color.white;
-        }
-    }
 
     private void UpdateColor()
     {
-        var colorBlock = buttonHeader.colors;
         if (parentAccordion != null)
         {
-            colorBlock.normalColor = parentAccordion.buttonHeader.colors.highlightedColor;
+            SetBackgroundColor(parentAccordion.background.color);
         }
-        else
-        {
-            colorBlock.normalColor = colorBlock.highlightedColor;
-        }
-        buttonHeader.colors = colorBlock;
     }
 
     private void UpdateChildrenVisibility()
@@ -376,7 +358,11 @@ public class NP_AccordionItem : NP_UIElements, ITextableElement, IClickableEleme
     /// <inheritdoc />
     public void SetBackgroundColor(Color color)
     {
-        _headerImage.color = color;
+        background.color = color;
+    }
+    public void SetBackgroundImage(Texture texture)
+    {
+        background.texture = texture;
     }
 
     /// <inheritdoc />
@@ -413,7 +399,46 @@ public class NP_AccordionItem : NP_UIElements, ITextableElement, IClickableEleme
         }
         buttonHeader.onClick.AddListener(onClickAction);
     }
+    public void RemoveListenersFromMainButton()
+    {
+        buttonHeader.onClick.RemoveAllListeners();
+    }
+    public void RemoveListenersFromMainButton(UnityAction onClickAction)
+    {
+        buttonHeader.onClick.RemoveListener(onClickAction);
+    }
+    public void RemoveListenersFromArrow()
+    {
+        arrowIconButton.onClick.RemoveAllListeners();
+    }
+    public void RemoveListenerFromArrow(UnityAction onClickAction)
+    {
+        arrowIconButton.onClick.RemoveListener(onClickAction);
+    }
+    public void AddArrowClick(UnityAction onClickAction)
+    {
+        arrowIconButton.onClick.AddListener(onClickAction);
+    }
 
+    public void SetHeaderColorBlock(ColorBlock colorBlock)
+    {
+        SetButtonBlockColor(buttonHeader, colorBlock);
+    }
+    
+    public void SetArrowColorBlock(ColorBlock colorBlock)
+    {
+        SetButtonBlockColor(arrowIconButton, colorBlock);
+    }
+    private void SetButtonBlockColor(Button button, ColorBlock colorBlock)
+    {
+        button.colors = colorBlock;
+    }
+
+    public void SetSameColorBlockForArrowAndHeader(ColorBlock colorBlock)
+    {
+        SetHeaderColorBlock(colorBlock);
+        SetArrowColorBlock(colorBlock);
+    }
     /// <summary>
     /// Sets the data for the parent accordion.
     /// </summary>
@@ -522,7 +547,6 @@ public class NP_AccordionItem : NP_UIElements, ITextableElement, IClickableEleme
     private void RescaleArrowIcon(float scalar)
     {
         //Handel Arrow Icon
-        //RectTransform arrowIconRectTransform = arrowIcon.GetComponent<RectTransform>();
         if (arrowIconRectTransform)
         {
             RectTransform.Axis vertical = RectTransform.Axis.Vertical;

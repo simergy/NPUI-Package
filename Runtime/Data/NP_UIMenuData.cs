@@ -374,23 +374,26 @@ using UnityEngine.Events;
         public List<AccordionData> AccordionChildren;
         public AccordionData ParentAccordion;
         public List<GenericUIData> UiElementsData;
+        public Vector2 PivotScaling;
 
-        public AccordionData(string text,  List<AccordionData> accordionChildren = null, List<GenericUIData> uiElementsData = null)
+        public AccordionData(string text,  List<AccordionData> accordionChildren = null, List<GenericUIData> uiElementsData = null, Vector2 pivotScaling = default)
         {
             Text = text;
             NpMenuData = null;
             ClickAction = null;
             AccordionChildren = accordionChildren;
             UiElementsData = uiElementsData;
+            PivotScaling = pivotScaling;
         }
         
-        public AccordionData(string text, List<GenericUIData> uiElementsData)
+        public AccordionData(string text, List<GenericUIData> uiElementsData, Vector2 pivotScaling = default)
         {
             Text = text;
             NpMenuData = null;
             ClickAction = null;
             AccordionChildren = null;
             UiElementsData = uiElementsData;
+            PivotScaling = pivotScaling;
         }
         
         public AccordionData(string text, MenuData npMenuData = null, UnityAction onClick = null, List<AccordionData> accordionChildren = null, List<GenericUIData> uiElementsData = null)
@@ -400,6 +403,7 @@ using UnityEngine.Events;
             ClickAction = onClick;
             AccordionChildren = accordionChildren;
             UiElementsData = uiElementsData;
+            PivotScaling = new Vector2(0,1);
         }
         
         public AccordionData(string text)
@@ -409,6 +413,7 @@ using UnityEngine.Events;
             ClickAction = null;
             AccordionChildren = null;
             UiElementsData = null;
+            PivotScaling = new Vector2(0,1);
         }
         
         public override NP_UIElements GetUIElement()

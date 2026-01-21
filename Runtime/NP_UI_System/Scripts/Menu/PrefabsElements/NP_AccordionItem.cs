@@ -82,8 +82,6 @@ public class NP_AccordionItem : NP_UIElements, ITextableElement, IClickableEleme
         if (contentRawParent != null)
         {
             RectTransform rectTransform = contentRawParent.GetComponent<RectTransform>();
-           // VerticalLayoutGroup headerVertical = header.GetComponent<VerticalLayoutGroup>();
-            //headerVertical.padding.left = (int)(rectTransform.anchoredPosition.x + OffsetX * level);
             rectTransform.offsetMin = new Vector2(rectTransform.anchoredPosition.x + OffsetX * level, rectTransform.offsetMin.y);
         }
 
@@ -216,7 +214,6 @@ public class NP_AccordionItem : NP_UIElements, ITextableElement, IClickableEleme
 
     private void UpdateColor()
     {
-        //var colorBlock = buttonHeader.colors;
         if (parentAccordion != null)
         {
             SetBackgroundColor(parentAccordion.background.color);
@@ -550,7 +547,6 @@ public class NP_AccordionItem : NP_UIElements, ITextableElement, IClickableEleme
     private void RescaleArrowIcon(float scalar)
     {
         //Handel Arrow Icon
-        //RectTransform arrowIconRectTransform = arrowIcon.GetComponent<RectTransform>();
         if (arrowIconRectTransform)
         {
             RectTransform.Axis vertical = RectTransform.Axis.Vertical;

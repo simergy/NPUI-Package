@@ -1,9 +1,9 @@
 using System;
-using System.Collections.Generic;
 using DA_Assets.Extensions;
 using NP_UI;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.UIElements;
 
 public class NP_MenuDesignData : Singleton<NP_MenuDesignData>
 {
@@ -13,8 +13,6 @@ public class NP_MenuDesignData : Singleton<NP_MenuDesignData>
     [SerializeField] private NP_InputField _npInputField;
     [SerializeField] private NP_Slider _npSlider;
     [SerializeField] private NP_CheckBox _checkBox;
-    [SerializeField] private NP_AccordionItem _npAccordionItem; 
-    [SerializeField] private NP_Accordion _npAccordion; 
     
     
     public NP_Button CreateButton()
@@ -25,6 +23,7 @@ public class NP_MenuDesignData : Singleton<NP_MenuDesignData>
     public NP_Button CreateButton(UnityAction clickAction, string text)
     {
         NP_Button npButton = Instantiate(_npButton, Vector3.zero, Quaternion.identity);
+        npButton.SetSize(new Vector2(100f, 100f));
         npButton.SetOnClick(clickAction);
         npButton.SetText(text);
         return npButton;
@@ -33,8 +32,7 @@ public class NP_MenuDesignData : Singleton<NP_MenuDesignData>
     public NP_Button CreateButton(GenericUIData uiData)
     {
         NP_Button npButton = Instantiate(_npButton, Vector3.zero, Quaternion.identity);
-        
-        // Removed unnecessary reassignment: GenericUIData buttonData = uiData;
+        npButton.SetSize(uiData.size);
         bool isPictureButton;
         bool isTextButton;
         
@@ -47,6 +45,7 @@ public class NP_MenuDesignData : Singleton<NP_MenuDesignData>
             HandleUIGenericButton(npButton, (ButtonData)uiData, out isPictureButton, out isTextButton);
         }
         
+
         return npButton;
     }
 
@@ -109,8 +108,7 @@ public class NP_MenuDesignData : Singleton<NP_MenuDesignData>
         if (labelData != null)
         {
             npLable.SetText(labelData.Text);
-            // Assuming SetSize sets font size or dimensions
-            npLable.SetSize(labelData.FontSize); 
+            npLable.SetSize(labelData.FontSize);
         }
         return npLable;
     }
@@ -172,131 +170,52 @@ public class NP_MenuDesignData : Singleton<NP_MenuDesignData>
         npCheckBox.SetImageButtonOnClick(checkBoxData.OnImageButtonClick);
         return npCheckBox;
     }
+    private NP_UIElements CreateGridLayout(GenericUIData uiData)
+    {
+        GridLayoutData gridLayoutData = uiData as GridLayoutData;
+        NP_GridLayout npGridLayout = Instantiate(_npGridLayout, Vector3.zero, Quaternion.identity);
+        npGridLayout.SetCellSize(gridLayoutData.cellSize);
+        npGridLayout.SetPadding(gridLayoutData.padding);
+        npGridLayout.SetSpacing(gridLayoutData.spacing);
+        return npGridLayout;
+    }
     
-    // NOTE: This factory method assumes the calling code (the Menu View/Controller) 
-    // will set the parent transform of the returned NP_AccordionItem immediately.
-    private NP_UIElements CreateAccordion(GenericUIData uiData)
-    {
-        AccordionData rootAccordionData = uiData as AccordionData;
-        
-        if (rootAccordionData == null)
-        {
-            Debug.LogError("CreateAccordion received non-AccordionData. Returning null.");
-            return null;
-        }
-        
-        //Get the root enviroment
-        NP_Accordion rootAccordionEnvironment = Instantiate(_npAccordion, Vector3.zero, Quaternion.identity);
-
-        // 3. Initiate the recursive process for all children
-        // The first call uses the root item as the parent, level 0.
-        if (rootAccordionData.AccordionChildren != null && rootAccordionData.AccordionChildren.Count > 0)
-        {
-            // IMPORTANT: We pass the reference to the parent's content transform 
-            // (which is the rootAccordionItem's transform in this flat hierarchy)
-            RectTransform rectTransform = rootAccordionEnvironment.ContentTransform.GetComponent<RectTransform>();
-            rectTransform.rect.Set(200,100,200,100);
-            
-            RectTransform rectTransformOfScroll = rootAccordionEnvironment.ScrollRect.GetComponent<RectTransform>();
-            if (rectTransformOfScroll != null)
-            {
-                rectTransformOfScroll.pivot = rootAccordionData.PivotScaling;
-            }
-            BuildAccordionChildren(rootAccordionData.AccordionChildren, 1, null, rootAccordionEnvironment, 0);
-        }
-        
-        // 4. Initialize the root item (Level 0, Parent = null)
-        // This must be done AFTER children are potentially created, or the children 
-        // need to be initialized *after* this call. We initialize it now as the root.
-        //rootAccordionItem.Initialize(null, 0, rootAccordionEnvironment.ContentTransform); 
-
-        return rootAccordionEnvironment;
-    }
-
-    /// <summary>
-    /// Recursively instantiates and wires child Accordion items into the hierarchy.
-    /// </summary>
-    /// <param name="childrenData">The list of AccordionData for the current level's children.</param>
-    /// <param name="currentLevel">The hierarchy depth of the items being created.</param>
-    /// <param name="parentItem">The instantiated NP_AccordionItem that will be the parent.</param>
-    /// <param name="contentTransform">The Transform that serves as the layout container (the Scroll View Content).</param>
-    /// <param name="i"></param>
-    private void BuildAccordionChildren(List<AccordionData> childrenData, int currentLevel, NP_AccordionItem parentItem,
-        NP_Accordion np_Accordion, int i)
-    {
-        if (childrenData == null || childrenData.Count == 0) return;
-
-        foreach (AccordionData childData in childrenData)
-        {
-            // 1. Instantiate the CHILD item
-            NP_AccordionItem childItem = Instantiate(_npAccordionItem, np_Accordion.ContentTransform);
-
-            // 2. Configure the CHILD item with its data
-            childItem.SetText(childData.Text);
-            if (childData.ClickAction != null)
-            {
-                childItem.SetOnClick(childData.ClickAction, isRemoveListeners: false);
-            }
-
-            childItem.SetParentData(childData.ParentAccordion);
-            childItem.SetChildrenData(childData.AccordionChildren);
-
-            // 3. Wire the hierarchy: Initialize the child
-            // This call: 
-            // - Sets the level on the child.
-            // - Calls parentItem.AddChild(childItem).
-            // - parentItem.AddChild() uses SetSiblingIndex() to put the child visually 
-            //   right after the parent in the VerticalLayoutGroup.
-            childItem.Initialize(parentItem, currentLevel);
-            childItem.ApplyElementsToAccordion(childData.UiElementsData);
-            childData.SetValue(childItem);
-            // 4. Recurse for the grandchildren
-            if (childData.AccordionChildren != null && childData.AccordionChildren.Count > 0)
-            {
-                BuildAccordionChildren(childData.AccordionChildren, currentLevel + 1, childItem, np_Accordion, ++i);
-            }
-            childItem.SetAccordionContainer(np_Accordion);
-        }
-    }
-
     public NP_UIElements CreateUIElementByData(GenericUIData uiData)
     {
         Type typeOfData = uiData.GetType();
         NP_UIElements npUIElements = null;
-        
         if (typeOfData == typeof(InputFieldData) || typeOfData == typeof(FormMenu.ValidatableInputFieldData))
         {
             npUIElements = CreateInputField(uiData);
         }
-        else if (typeOfData == typeof(ButtonData) || typeOfData == typeof(FormMenu.ValidatableButtonData))
+        if (typeOfData == typeof(ButtonData) || typeOfData == typeof(FormMenu.ValidatableButtonData))
         {
             npUIElements = CreateButton(uiData);
         }
-        else if (typeOfData == typeof(LabelData) || typeOfData == typeof(FormMenu.ValidatableLabelData))
+        if (typeOfData == typeof(LabelData) || typeOfData == typeof(FormMenu.ValidatableLabelData))
         {
             npUIElements = CreateLabel(uiData);
         }
-        else if (typeOfData == typeof(SliderData) || typeOfData == typeof(FormMenu.ValidatableSliderData))
+        if (typeOfData == typeof(SliderData) || typeOfData == typeof(FormMenu.ValidatableSliderData))
         {
             npUIElements = CreateSlider(uiData);
         }
-        else if (typeOfData == typeof(CheckBoxData))
+        if (typeOfData == typeof(CheckBoxData))
         {
             npUIElements = CreateCheckBox(uiData);
         }
-        else if (typeOfData == typeof(TabData))
+        if (typeOfData == typeof(GridLayoutData))
         {
-            npUIElements = CreateButton(uiData);
+            npUIElements = CreateGridLayout(uiData);
         }
-        else if (typeOfData == typeof(AccordionData)) 
-        {
-            npUIElements = CreateAccordion(uiData);
-        }
-        
         if (npUIElements != null)
         {
             npUIElements.ID = uiData.ID;
         }
         return npUIElements;
     }
+
+
 }
+
+

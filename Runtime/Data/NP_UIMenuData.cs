@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using NP_UI;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -36,10 +35,6 @@ using UnityEngine.Events;
     {
         Regular,
         Form,
-        TabsUp,
-        TabsLeft,
-        TabsRight,
-        TabsDown
     }
 
     public enum MenuFormType
@@ -66,6 +61,7 @@ using UnityEngine.Events;
     public abstract class GenericUIData : ISetterable
     {
         public string ID;
+        public Vector2 size;
 
         protected NP_UIElements UIElement;
 
@@ -150,99 +146,37 @@ using UnityEngine.Events;
         public UnityEngine.Color BackgroundColor;
         public UnityEngine.Sprite MenuIcon;
 
-        public ButtonData(UnityAction onClick, string textButton)
+        public ButtonData(UnityAction onClick, string textButton, Vector2 size = default(Vector2))
         {
             ClickAction = onClick;
             Text = textButton;
             MenuIcon = null;
+            this.size = size;
         }
 
-        public ButtonData(UnityAction onClick, UnityEngine.Sprite menuIcon)
+        public ButtonData(UnityAction onClick, UnityEngine.Sprite menuIcon, Vector2 size = default(Vector2))
         {
             ClickAction = onClick;
             MenuIcon = menuIcon;
             Text = String.Empty;
+            this.size = size;
         }
 
-        public ButtonData(UnityAction onClick, UnityEngine.Sprite menuIcon, string text)
+        public ButtonData(UnityAction onClick, UnityEngine.Sprite menuIcon, string text, Vector2 size = default(Vector2))
         {
             ClickAction = onClick;
             MenuIcon = menuIcon;
             Text = text;
+            this.size = size;
         }
 
-        public ButtonData(UnityAction onClick, string text, UnityEngine.Color backgroundColor)
+        public ButtonData(UnityAction onClick, string text, UnityEngine.Color backgroundColor, Vector2 size = default(Vector2))
         {
             ClickAction = onClick;
             MenuIcon = null;
             Text = text;
             BackgroundColor = backgroundColor;
-        }
-
-        protected ButtonData()
-        {
-        }
-
-        public override NP_UIElements GetUIElement()
-        {
-            return UIElement;
-        }
-    }
-
-    public class TabData : ButtonData
-    {
-        public MenuData NpMenuData;
-        public Type TypeOfMenu;
-        public UnityAction ClickAction;
-        public string Text;
-        public UnityEngine.Color BackgroundColor;
-        public UnityEngine.Sprite MenuIcon;
-
-        public TabData (UnityAction onClick, string textButton) : base(onClick, textButton)
-        {
-            ClickAction = onClick;
-            Text = textButton;
-            MenuIcon = null;
-        }
-        public TabData (MenuData menuData, string textButton)
-        {
-            Text = textButton;
-            NpMenuData = menuData;
-        }
-        public TabData (Type typeOfMenu, string textButton, UnityAction onClick)
-        {
-            Text = textButton;
-            TypeOfMenu = typeOfMenu;
-            ClickAction = onClick;
-        }
-        
-        public TabData (Type typeOfMenu, UnityEngine.Sprite menuIcon, UnityAction onClick)
-        {
-            MenuIcon = menuIcon;
-            TypeOfMenu = typeOfMenu;
-            ClickAction = onClick;
-        }
-
-        public TabData (UnityAction onClick, UnityEngine.Sprite menuIcon) : base(onClick, menuIcon)
-        {
-            ClickAction = onClick;
-            MenuIcon = menuIcon;
-            Text = String.Empty;
-        }
-
-        public TabData (UnityAction onClick, UnityEngine.Sprite menuIcon, string text) : base(onClick, menuIcon, text)
-        {
-            ClickAction = onClick;
-            MenuIcon = menuIcon;
-            Text = text;
-        }
-
-        public TabData (UnityAction onClick, string text, UnityEngine.Color backgroundColor) : base(onClick, text, backgroundColor)
-        {
-            ClickAction = onClick;
-            MenuIcon = null;
-            Text = text;
-            BackgroundColor = backgroundColor;
+            this.size = size;
         }
 
         public override NP_UIElements GetUIElement()
@@ -366,63 +300,6 @@ using UnityEngine.Events;
         }
     }
 
-    public class AccordionData : GenericUIData
-    {
-        public MenuData NpMenuData;
-        public UnityAction ClickAction;
-        public string Text;
-        public List<AccordionData> AccordionChildren;
-        public AccordionData ParentAccordion;
-        public List<GenericUIData> UiElementsData;
-        public Vector2 PivotScaling;
-
-        public AccordionData(string text,  List<AccordionData> accordionChildren = null, List<GenericUIData> uiElementsData = null, Vector2 pivotScaling = default)
-        {
-            Text = text;
-            NpMenuData = null;
-            ClickAction = null;
-            AccordionChildren = accordionChildren;
-            UiElementsData = uiElementsData;
-            PivotScaling = pivotScaling;
-        }
-        
-        public AccordionData(string text, List<GenericUIData> uiElementsData, Vector2 pivotScaling = default)
-        {
-            Text = text;
-            NpMenuData = null;
-            ClickAction = null;
-            AccordionChildren = null;
-            UiElementsData = uiElementsData;
-            PivotScaling = pivotScaling;
-        }
-        
-        public AccordionData(string text, MenuData npMenuData = null, UnityAction onClick = null, List<AccordionData> accordionChildren = null, List<GenericUIData> uiElementsData = null)
-        {
-            Text = text;
-            NpMenuData = npMenuData;
-            ClickAction = onClick;
-            AccordionChildren = accordionChildren;
-            UiElementsData = uiElementsData;
-            PivotScaling = new Vector2(0,1);
-        }
-        
-        public AccordionData(string text)
-        {
-            Text = text;
-            NpMenuData = null;
-            ClickAction = null;
-            AccordionChildren = null;
-            UiElementsData = null;
-            PivotScaling = new Vector2(0,1);
-        }
-        
-        public override NP_UIElements GetUIElement()
-        {
-            return UIElement;
-        }
-    }
-
-
     public class SliderData : GenericUIData
     {
         public UnityAction<float> OnValueChanged;
@@ -480,8 +357,34 @@ using UnityEngine.Events;
         {
             return UIElement;
         }
-        
-        
-        
+    }
+    
+    public class GridLayoutData : GenericUIData
+    {
+        public Vector2 gridSize;
+        public Vector2 cellSize;
+        public RectOffset padding;
+        public Vector2 spacing;
+        public GridLayoutData(Vector2 cellSize)
+        {
+            this.cellSize = cellSize;
+        }
 
+        public GridLayoutData(Vector2 cellSize, Vector2 spacing)
+        {
+            this.cellSize = cellSize;
+            this.spacing = spacing;
+        }
+
+        public GridLayoutData(Vector2 cellSize, Vector2 spacing, RectOffset padding)
+        {
+            this.cellSize = cellSize;
+            this.spacing = spacing;
+            this.padding = padding;
+        }
+
+        public override NP_UIElements GetUIElement()
+        {
+            return UIElement;
+        }
     }

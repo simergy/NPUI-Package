@@ -1,7 +1,6 @@
 using System;
 using UnityEngine;
 using UnityEngine.UI;
-using System.Reflection;
 
 [Serializable]
 public class MenuData : IEquatable<MenuData>
@@ -17,7 +16,6 @@ public class MenuData : IEquatable<MenuData>
     public string MenuName = "New_Dynamic_Menu";
     public Sprite ItemIcon;
     public bool IsAlwaysOn;
-
     public MenuType MenuType;
     
     public UIMenuGenerator.MenuAlignment Alignment = UIMenuGenerator.MenuAlignment.RightSide;
@@ -70,13 +68,6 @@ public class MenuData : IEquatable<MenuData>
     public const int DefaultGridLayoutConstraintCountStatic = 1;
     // ---------------------------------------------------
     
-    // Add these fields to your MenuData or NP_UIMenuData structure
-    [Header("Resizing Settings (Percentage 0-1)")]
-    public bool AllowResizeX = false;
-    public bool AllowResizeY = false;
-    public Vector2 MinSizePercent = new Vector2(0.1f, 0.1f); // 10% of screen
-    public Vector2 MaxSizePercent = new Vector2(0.9f, 0.9f); // 90% of screen
-    public bool ShouldResizeCells = false; // New boolean to toggle cell scaling
     
     public static readonly Color DefaultMenuBackgroundColor = new Color(0.1f, 0.1f, 0.1f, 0.8f);
     public static readonly Color DefaultViewportBackgroundColor = new Color(0.2f, 0.2f, 0.2f, 0.5f);
@@ -437,17 +428,5 @@ public class MenuData : IEquatable<MenuData>
             return true;
         }
         return !other1.Equals(other2);
-    }
-
-    public MenuData Clone()
-    {
-        MenuData CloneMenuData = new MenuData(this.MenuName, this.ItemType);
-        FieldInfo[] currentFields = GetType().GetFields(BindingFlags.Instance | BindingFlags.Public);
-        foreach (FieldInfo currentField in currentFields)
-        {
-            var value = currentField.GetValue(this);
-            currentField.SetValue(CloneMenuData, value);
-        }
-        return CloneMenuData;
     }
 }

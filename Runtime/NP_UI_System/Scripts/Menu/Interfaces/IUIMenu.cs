@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -7,17 +6,20 @@ using UnityEngine.UI;
 
 namespace NP_UI
 {
+
     public class NpGenericMenu : MonoBehaviour
     {
         protected Dictionary<string, NP_UIElements> IElementsIDDictionary = new Dictionary<string, NP_UIElements>();
         protected GameObject MenuGameObject { get; set; }
 
         [SerializeField] private NP_Label headLineText;
-        [SerializeField] private GridLayoutGroup gridLayoutGroup;
+        public UIMenuGenerator.GridLayoutType layoutGroup;
         public NP_Menu npMenu;
         protected ElemetsIDSystem _elementsSystem;
         protected List<GenericUIData> genericUIDatas = new List<GenericUIData>();
-        private UIAnimator uiAnimator;
+        private GameObject _contentHeader;
+        private LayoutGroup _contentHeaderLayout;
+
 
         public virtual void CloseMenu()
         {
@@ -31,34 +33,20 @@ namespace NP_UI
             MenuGameObject.SetActive(true);
         }
 
-        private void CloseMenuExceptMe(NpGenericMenu menu)
-        {
-            if (menu != this)
-            {
-                CloseMenu();
-            }
-        }
 
         public void Awake()
         {
             InitialisationHandler();
+            InitLayoutGroup();
         }
 
         private void InitialisationHandler()
         {
-            uiAnimator = gameObject.GetComponent<UIAnimator>();
-            if (uiAnimator == null)
-            {
-                uiAnimator = gameObject.AddComponent<UIAnimator>();
-            }
-
-            if (npMenu == null)
-            {
-                npMenu = GetComponent<NP_Menu>();
-            }
+            npMenu = GetComponent<NP_Menu>();
             SetID();
             if (npMenu != null)
             {
+                _contentHeader = npMenu.contentHearder;
                 MenuData menuData = npMenu.menuData;
                 if (menuData != null)
                 {
@@ -85,56 +73,53 @@ namespace NP_UI
             }
         }
 
+        private void InitLayoutGroup()
+        {
+            switch (layoutGroup)
+            {
+                case UIMenuGenerator.GridLayoutType.Grid:
+                    _contentHeaderLayout = _contentHeader.AddComponent<GridLayoutGroup>();
+                    break;
+                case UIMenuGenerator.GridLayoutType.Vertical:
+                    VerticalLayoutGroup vertical = _contentHeader.AddComponent<VerticalLayoutGroup>();
+                    vertical.childForceExpandHeight = false;
+                    vertical.childForceExpandWidth = false;
+                    vertical.childControlHeight = false;
+                    vertical.childControlWidth = false;
+                    vertical.spacing = 10f;
+                    
+                    break;
+                case UIMenuGenerator.GridLayoutType.Horizontal:
+                    HorizontalLayoutGroup horizontalLayoutGroup = _contentHeader.AddComponent<HorizontalLayoutGroup>();
+                    horizontalLayoutGroup.childForceExpandHeight = false;
+                    horizontalLayoutGroup.childForceExpandWidth = false;
+                    horizontalLayoutGroup.childControlHeight = false;
+                    horizontalLayoutGroup.childControlWidth = false;
+                    horizontalLayoutGroup.spacing = 10f;
+                    break;
+            }
+
+            foreach (GenericUIData genericUIData in genericUIDatas)
+            {
+                genericUIData.GetUIElement().SetSize();
+            }
+        }
+
         protected void SetEscapeButtonAction(UnityAction unityAction)
         {
-            if (npMenu.EscapeButton)
-            {
-                npMenu.EscapeButton.onClick.RemoveAllListeners();
-                npMenu.EscapeButton.onClick.AddListener(unityAction);
-            }
-
+            npMenu.EscapeButton.onClick.RemoveAllListeners();
+            npMenu.EscapeButton.onClick.AddListener(unityAction);
         }
         
-        protected void SetEscapeButtonTexture(Texture texture)
-        {
-            if (npMenu.EscapeButton)
-            {
-                npMenu.EscapeButton.GetComponent<RawImage>().texture = texture;
-            }
-        }
-
-        protected void RotateEscapeButton(Vector2 rotation)
-        {
-            RectTransform rectTransform  = npMenu.EscapeButton.GetComponent<RectTransform>();
-            rectTransform.Rotate(rectTransform.localEulerAngles + new Vector3(rotation.x, rotation.y, 0), Space.Self);
-        }
-        
-        protected void SetEscapeButtonText(Image image)
-        {
-        }
-        public void ClearUI(bool clearData = true, bool clearTabs = true)
+        protected void ClearUI(bool clearData = true)
         {
             if (IElementsIDDictionary != null && IElementsIDDictionary.Count > 0)
             {
-                if (!clearTabs)
+                foreach (NP_UIElements element in IElementsIDDictionary.Values)
                 {
-                    List<GenericUIData> tabDatas = genericUIDatas.Where(x=>x is TabData).ToList();
-                    foreach (NP_UIElements element in IElementsIDDictionary.Values)
+                    if (element != null)
                     {
-                        if (element != null && tabDatas.Find(x=>x.GetUIElement() == element) == null)
-                        {
-                            Destroy(element.gameObject);
-                        }
-                    }
-                }
-                else
-                {
-                    foreach (NP_UIElements element in IElementsIDDictionary.Values)
-                    {
-                        if (element != null)
-                        {
-                            Destroy(element.gameObject);
-                        }
+                        Destroy(element.gameObject);
                     }
                 }
 
@@ -146,9 +131,9 @@ namespace NP_UI
             }
         }
 
-        protected virtual void CreateUI()
+        protected void CreateUI()
         {
-            SetFields(npMenu);
+            SetFields();
             CreateMenuItems();
             AddElementsByDataToMenu(genericUIDatas, _elementsSystem);
             AddListeners();
@@ -160,7 +145,6 @@ namespace NP_UI
             if (!npMenu.menuData.IsAlwaysOn)
             {
                 NP_EventsManager.CloseAllMenus.AddListener(CloseMenu);
-                NP_EventsManager.CloseAllMenusExceptMe.AddListener(CloseMenuExceptMe);
             }
         }
 
@@ -177,19 +161,12 @@ namespace NP_UI
 
         public void SetFields(NP_Menu npMenu)
         {
-            _elementsSystem = new ElemetsIDSystem(npMenu.menuData.MenuName);
             headLineText = npMenu.headLineText;
-            gridLayoutGroup = npMenu.gridLayoutGroup;
-            if (MenuGameObject == null)
-            {
-                MenuGameObject = gameObject;
-            }
         }
 
         private void SetFields()
         {
             _elementsSystem = new ElemetsIDSystem(npMenu.menuData.MenuName);
-            gridLayoutGroup = GetComponentInChildren<GridLayoutGroup>(true);
             if (MenuGameObject == null)
             {
                 MenuGameObject = gameObject;
@@ -203,7 +180,7 @@ namespace NP_UI
 
         public void AddElementToMenu(NP_UIElements element)
         {
-            element.transform.SetParent(gridLayoutGroup.transform, false);
+            element.transform.SetParent(_contentHeader.transform, false);
         }
 
         public void AddListOfElementsToMenu(List<NP_UIElements> elements)
@@ -216,7 +193,7 @@ namespace NP_UI
 
             foreach (var element in elements)
             {
-                element.transform.SetParent(gridLayoutGroup.transform, false);
+                element.transform.SetParent(_contentHeader.transform, false);
             }
         }
 
@@ -243,7 +220,7 @@ namespace NP_UI
                 
                 if (uiElement != null)
                 {
-                    uiElement.transform.SetParent(gridLayoutGroup.transform, false);
+                    uiElement.transform.SetParent(_contentHeader.transform, false);
                 }
                 else
                 {
@@ -265,11 +242,6 @@ namespace NP_UI
             return element;
         }
 
-        public GridLayoutGroup GetGridLayoutGroup()
-        {
-            return gridLayoutGroup;
-        }
-
         private void Update()
         {
             if (Input.GetKeyDown(KeyCode.Escape))
@@ -283,16 +255,6 @@ namespace NP_UI
 
         public virtual void CreateMenuItems()
         {
-        }
-
-        protected void HideAndShowHeadLine(bool toEnable)
-        {
-            headLineText.SetText(String.Empty);
-        }
-
-        protected void HideAndShowHeadLine()
-        {
-            headLineText.SetText(headLineText.GetText() == string.Empty ? npMenu.menuData.MenuName : string.Empty);
         }
 
         /// <summary>
@@ -336,15 +298,12 @@ namespace NP_UI
                 return null;
             }
         }
-
-        protected void TransitMenuTo(Vector2 target, float duration = 0.3f)
-        {
-            uiAnimator.MoveTo(target, duration);
-        }
-        
-        protected void TransitMenuToStart(float duration = 0.3f)
-        {
-            uiAnimator.MoveToStart(duration);
-        }
     }
+
+    //public interface ICreatableMenu
+    //{
+    //    void CreateMenuItems();
+//
+    //    void StartAfterCreation();
+    //}
 }

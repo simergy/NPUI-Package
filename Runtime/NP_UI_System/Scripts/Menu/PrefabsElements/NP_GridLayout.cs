@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -6,38 +7,78 @@ using UnityEngine.UI;
 /// </summary>
 public class NP_GridLayout : NP_UIElements
 {
-    protected HorizontalLayoutGroup horizontalLayoutGroup;
-    protected VerticalLayoutGroup verticalLayoutGroup;
-    protected UnityEngine.UI.GridLayoutGroup gridLayoutGroup; // Note: full namespace to avoid conflict with enum
+    [SerializeField] protected UnityEngine.UI.GridLayoutGroup gridLayoutGroup; // Note: full namespace to avoid conflict with enum
 
     protected override void Awake()
     {
         base.Awake();
         // Get references to potential layout groups
-        horizontalLayoutGroup = GetComponent<HorizontalLayoutGroup>();
-        verticalLayoutGroup = GetComponent<VerticalLayoutGroup>();
         gridLayoutGroup = GetComponent<UnityEngine.UI.GridLayoutGroup>();
     }
 
-    public void SetDirection(LayoutDirection layoutDirection, GridLayoutGroup gridLayoutGroupType)
+    public void SetPadding(RectOffset padding)
+    {
+        if (padding != null)
+        {
+            gridLayoutGroup.padding = padding;
+        }
+    }
+
+    public void SetCellSize(Vector2 cellSize)
+    {
+        if (cellSize != null)
+        {
+            gridLayoutGroup.cellSize = cellSize;
+        }
+    }
+
+    public void SetSpacing(Vector2 spacing)
+    {
+        if (spacing != null)
+        {
+            gridLayoutGroup.spacing = spacing;
+        }
+    }
+
+    public void SetStartCorner(GridLayoutGroup.Corner corner)
+    {
+        if (corner != null)
+        {
+            gridLayoutGroup.startCorner = corner;
+        }
+    }
+
+    public void SetStartAxis(GridLayoutGroup.Axis axis)
+    {
+        if (axis != null)
+        {
+            gridLayoutGroup.startAxis = axis;
+        }
+    }
+
+    public void SetConstraint(GridLayoutGroup.Constraint constraint, int constraintCount = 0)
+    {
+        if (constraint != null)
+        {
+            gridLayoutGroup.constraint = constraint;
+            gridLayoutGroup.constraintCount = constraintCount;
+        }
+    }
+
+    public void SetChilderns(List<GenericUIData> childrens)
+    {
+        foreach (GenericUIData child in childrens)
+        {
+            child.GetUIElement().transform.SetParent(gridLayoutGroup.transform);
+        }
+    }
+
+    public void SetDirection(GridLayoutGroup gridLayoutGroupType)
     {
         // This method implies controlling which layout group component is active or
         // how it's configured based on the desired direction.
         // Example: Only one layout group should be active at a time.
-        DisableAllLayoutGroups();
 
-        switch (layoutDirection)
-        {
-            case LayoutDirection.Horizontal:
-                if (horizontalLayoutGroup == null) horizontalLayoutGroup = gameObject.AddComponent<HorizontalLayoutGroup>();
-                horizontalLayoutGroup.enabled = true;
-                break;
-            case LayoutDirection.Vertical:
-                if (verticalLayoutGroup == null) verticalLayoutGroup = gameObject.AddComponent<VerticalLayoutGroup>();
-                verticalLayoutGroup.enabled = true;
-                break;
-                // If you had a 'Grid' layoutDirection, you'd enable gridLayoutGroup here.
-        }
         // You might use gridLayoutGroupType to further configure settings,
         // e.g., spacing, padding, child alignment based on the type.
         // This part would require more specific logic based on your design.
@@ -63,11 +104,5 @@ public class NP_GridLayout : NP_UIElements
         //     // GameObject newChild = Instantiate(yourChildPrefab, transform);
         // }
     }
-
-    private void DisableAllLayoutGroups()
-    {
-        if (horizontalLayoutGroup != null) horizontalLayoutGroup.enabled = false;
-        if (verticalLayoutGroup != null) verticalLayoutGroup.enabled = false;
-        if (gridLayoutGroup != null) gridLayoutGroup.enabled = false;
-    }
+    
 }

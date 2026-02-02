@@ -23,6 +23,7 @@ namespace NP_UI
         {
             base.Awake();
             buttonComponent = GetComponent<Button>();
+            uiRectTransform.sizeDelta = size;
             if (buttonComponent == null)
             {
                 Debug.LogError("NP_Button requires a Button component on its GameObject.", this);
@@ -47,14 +48,6 @@ namespace NP_UI
                 buttonComponent.onClick.AddListener(onClickAction);
             }
         }
-        
-        public void AddOnClick(UnityAction onClickAction)
-        {
-            if (buttonComponent != null)
-            {
-                buttonComponent.onClick.AddListener(onClickAction);
-            }
-        }
 
         public void SetBackgroundImage(Sprite texture)
         {
@@ -74,6 +67,16 @@ namespace NP_UI
             if (textHeadLine != null)
             {
                 textHeadLine.text = text;
+            }
+        }
+
+        public void SetSize(Vector2 size)
+        {
+            if (size != null)
+            {
+                this.size = size;
+                uiRectTransform.sizeDelta = size;
+                Debug.Log("NP_Button: Size set to: " + size);
             }
         }
 

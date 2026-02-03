@@ -655,7 +655,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   headLineText: {fileID: 600476254661733010}
-  contentHearder: {fileID: 5298633179738419259}
+  contentHearder: {fileID: 2700988147601269304}
   viewPort: {fileID: 1024810047202745642}
   scrollRect: {fileID: 4320702323056000722}
   backgroundImage: {fileID: 9166254710163904903}
@@ -1254,6 +1254,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6713407245223348962}
   - component: {fileID: 657835897536907956}
+  - component: {fileID: 8357525442428218467}
   m_Layer: 5
   m_Name: Content
   m_TagString: Untagged
@@ -1304,6 +1305,20 @@ MonoBehaviour:
   m_Spacing: {x: 10, y: 172.4}
   m_Constraint: 1
   m_ConstraintCount: 1
+--- !u!114 &8357525442428218467
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5298633179738419259}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3245ec927659c4140ac4f8d17403cc18, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_HorizontalFit: 2
+  m_VerticalFit: 2
 --- !u!1 &5392298884072527151
 GameObject:
   m_ObjectHideFlags: 0
@@ -2126,7 +2141,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 7465540376779085672}
   m_Direction: 0
   m_Value: 0
-  m_Size: 1
+  m_Size: 0.46702415
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:

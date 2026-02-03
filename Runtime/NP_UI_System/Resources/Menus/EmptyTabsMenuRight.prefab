@@ -655,7 +655,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   headLineText: {fileID: 600476254661733010}
-  contentHearder: {fileID: 2700988147601269304}
+  contentHearder: {fileID: 5298633179738419259}
   viewPort: {fileID: 1024810047202745642}
   scrollRect: {fileID: 4320702323056000722}
   backgroundImage: {fileID: 9166254710163904903}
@@ -671,6 +671,7 @@ MonoBehaviour:
     Alignment: 0
     ScreenCoveragePercent: 0.01
     LayoutType: 0
+    LayoutSpacing: 0
     ItemCellSize: {x: 0, y: 0}
     ItemSpacing: {x: 0, y: 0}
     GridPadding:
@@ -695,7 +696,6 @@ MonoBehaviour:
     TypeOfFormMenu: 0
     UseEscapeButton: 0
   EscapeButton: {fileID: 4057285285163446359}
-  gridLayoutType: 0
   _tabsContainer: {fileID: 1303286907870442861}
 --- !u!1 &2118244885864992784
 GameObject:
@@ -1253,7 +1253,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6713407245223348962}
-  - component: {fileID: 657835897536907956}
+  - component: {fileID: 3754822750848011064}
   m_Layer: 5
   m_Name: Content
   m_TagString: Untagged
@@ -1280,7 +1280,7 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
---- !u!114 &657835897536907956
+--- !u!114 &3754822750848011064
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1289,21 +1289,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 5298633179738419259}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8a8695521f0d02e499659fee002a26c2, type: 3}
+  m_Script: {fileID: 11500000, guid: 3245ec927659c4140ac4f8d17403cc18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Padding:
-    m_Left: -60
-    m_Right: 0
-    m_Top: 20
-    m_Bottom: 0
-  m_ChildAlignment: 0
-  m_StartCorner: 0
-  m_StartAxis: 1
-  m_CellSize: {x: 180, y: 55.1}
-  m_Spacing: {x: 10, y: 127.69}
-  m_Constraint: 1
-  m_ConstraintCount: 1
+  m_HorizontalFit: 2
+  m_VerticalFit: 2
 --- !u!1 &5392298884072527151
 GameObject:
   m_ObjectHideFlags: 0
@@ -1501,7 +1491,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a2d9da5940d0dee4889a07d739463abe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gridLayoutGroup: {fileID: 657835897536907956}
+  gridLayoutGroup: {fileID: 0}
   viewPort: {fileID: 5683511389805306702}
   scrollRect: {fileID: 5991725496329241455}
 --- !u!1 &5582063162709043231

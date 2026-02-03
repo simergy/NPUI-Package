@@ -11,5 +11,4 @@ public class NP_Menu : MonoBehaviour
     public Image backgroundImage;
     public MenuData menuData;
     public Button EscapeButton;
-    public UIMenuGenerator.GridLayoutType gridLayoutType;
 }

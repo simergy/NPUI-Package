@@ -1,11 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
 using NP_UI;
-using System;
 
 public class NP_MenusManager :  Singleton<NP_MenusManager> 
 {
@@ -143,8 +138,27 @@ public class NP_MenusManager :  Singleton<NP_MenusManager>
                 break;
             case MenuType.Form:
                 path = @"Menus\EmptyForm";
-                if(menuFormType == MenuFormType.BottomErrorsForm)
+                if (menuFormType == MenuFormType.BottomErrorsForm)
+                {
                     path = @"Menus\EmptyFormBottomLayout";
+                }
+                break;
+            
+            case MenuType.TabsUp:
+                path = @"Menus\EmptyTabsMenuUp";
+                break;
+            case MenuType.TabsDown:
+                path = @"Menus\EmptyTabsMenuBottom";
+                break;
+            case MenuType.TabsLeft:
+                path = @"Menus\EmptyTabsMenuLeft";
+                break;
+            case MenuType.TabsRight:
+                path = @"Menus\EmptyTabsMenuRight";
+                break;
+            
+            default:
+                path = @"Menus\EmptyMenu";
                 break;
         }
 

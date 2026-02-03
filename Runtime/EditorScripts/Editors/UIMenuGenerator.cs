@@ -1,22 +1,47 @@
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 using NP_UI;
 
-// This is a static class, meaning you can call its methods directly without creating an instance.
+/// <summary>
+/// A static utility class responsible for programmatically generating and configuring 
+/// complex UI menus within the Unity UI (uGUI) system.
+/// </summary>
 public static class UIMenuGenerator
 {
-    // --- Public Enums (can be placed outside this class if desired, but kept here for self-containment) ---
+    /// <summary>
+    /// Bitwise flags used to define the anchor and pivot position of the menu on the screen.
+    /// </summary>
+    [Flags]
     public enum MenuAlignment
     {
-        TopLeft, TopCenter, TopRight,
-        BottomLeft, BottomCenter, BottomRight,
-        LeftSide, RightSide, TopPanel, BottomPanel,
-        Center,
-        Stretch,
-        Left,
-        Right
+        // --- INDEPENDENT FLAGS (MUST be powers of two) ---
+        Top = 1 << 0,       // Binary: 0000000001 (Decimal: 1)
+        Bottom = 1 << 1,    // Binary: 0000000010 (Decimal: 2)
+        Left = 1 << 2,      // Binary: 0000000100 (Decimal: 4)
+        Right = 1 << 3,     // Binary: 0000001000 (Decimal: 8)
+
+        LeftSide = 1 << 4,  // 16
+        RightSide = 1 << 5, // 32
+        TopPanel = 1 << 6,  // 64 <- This is now a unique flag
+        BottomPanel = 1 << 7, // 128
+    
+        Center = 1 << 8,    // 256
+        Stretch = 1 << 9,   // 512
+    
+        // --- COMBINATION FLAGS (Combine the independent ones using the OR operator |) ---
+        TopLeft = Top | Left,             // (1 | 4) = 5
+        TopCenter = Top | Center,         // (1 | 256) = 257
+        TopRight = Top | Right,           // (1 | 8) = 9
+    
+        BottomLeft = Bottom | Left,       // (2 | 4) = 6
+        BottomCenter = Bottom | Center,   // (2 | 256) = 258 <- This is now a unique flag
+        BottomRight = Bottom | Right,     // (2 | 8) = 10
     }
 
+    /// <summary>
+    /// Defines how elements inside the menu content area are ordered and how the scroll rect behaves.
+    /// </summary>
     public enum GridLayoutType
     {
         Horizontal, // Items lay out horizontally, content scrolls horizontally
@@ -26,57 +51,158 @@ public static class UIMenuGenerator
     }
 
     /// <summary>
-    /// Generates a scrollable UI menu with a GridLayoutGroup purely from code,
-    /// using a MenuData struct/class for all parameters.
+    /// The primary entry point to generate a scrollable menu. 
+    /// Handles hierarchy creation, layout component attachment, and resizing logic.
     /// </summary>
-    /// <param name="config">The MenuData struct/class containing all necessary parameters.</param>
-    /// <returns>The root GameObject of the generated menu, or null if creation fails.</returns>
+    /// <param name="config">A data container (MenuData) holding all style and behavior settings.</param>
+    /// <returns>The generated NpGenericMenu component attached to the root object.</returns>
     public static NpGenericMenu CreateScrollableGridMenu(MenuData config)
     {
-        // --- 1. Validate parameters ---
-        float actualScreenCoveragePercent = config.ScreenCoveragePercent; // Use a local variable to allow modification
+        float actualScreenCoveragePercent = config.ScreenCoveragePercent;
+        // Validation ensures the menu isn't created with a 0% size or missing canvas
         if (!ValidateParameters(config.ParentCanvas, ref actualScreenCoveragePercent)) return null;
 
-        // --- 2. Create Root Menu GameObject ---
         GameObject rootMenuGO = CreateRootMenu(config);
-
         if (rootMenuGO == null) return null;
-        RectTransform menuRootRect = rootMenuGO.GetComponent<RectTransform>();
 
-        // --- 3. Create Viewport and Content GameObjects ---
+        RectTransform menuRootRect = rootMenuGO.GetComponent<RectTransform>();
+        
+        // Viewport acts as the "window" that masks the scrolling content
         RectTransform viewportRect = CreateViewport(rootMenuGO, config.ViewportBackgroundColor);
+        
+        // Content is the actual container that moves behind the viewport
         RectTransform contentRect = CreateContent(rootMenuGO.GetComponent<NP_Menu>(), viewportRect);
 
-        // --- 4. Add and Configure ScrollRect ---
-        ScrollRect
-            scrollRect =
-                rootMenuGO
-                    .GetComponentInChildren<
-                        ScrollRect>(); //AddScrollRect(rootMenuGO, viewportRect, contentRect, config.LayoutType);
-
-        NP_Menu npMenu = rootMenuGO.GetComponent<NP_Menu>();
-
-        // --- 5. Add and Configure ContentSizeFitter ---
         AddContentSizeFitter(contentRect, config.LayoutType);
-
-        // --- 6. Add and Configure GridLayoutGroup ---
-        npMenu.gridLayoutType =  config.LayoutType;
         // AddGridLayoutGroup(config, contentRect);
 
-        //Just For Example!
-        // --- 7. Populate with example items ---
-        //PopulateMenuItems(contentRect, config.ItemCount, config.ItemBackgroundColor, config.ItemTextColor);
+        NP_Menu npMenu = rootMenuGO.GetComponent<NP_Menu>();
         SetFields(config, npMenu);
         ApplyComponent(config, rootMenuGO);
         SetColors(config, npMenu);
-        // --- 8. Force Layout Rebuilds ---
+
+        // Forces Unity to calculate the UI positions immediately rather than waiting for the next frame
         ForceRebuildLayouts(menuRootRect, viewportRect, contentRect);
+        
+        // Orchestrate the creation of resizing handles
+        AddResizeHandles(rootMenuGO, config); 
 
         rootMenuGO.SetActive(config.IsAlwaysOn);
-        
         return rootMenuGO.GetComponent<NpGenericMenu>();
     }
 
+    // --- Modular Resizing Handle Logic ---
+
+    /// <summary>
+    /// Injects invisible UI handles at the edges of the menu to allow users to click and drag to resize.
+    /// </summary>
+    private static void AddResizeHandles(GameObject menuRoot, MenuData data)
+    {
+        if (!data.AllowResizeX && !data.AllowResizeY) return;
+
+        // Create modular settings and callbacks
+        ResizeSettings settings = CreateResizeSettings(data);
+        Action<Vector2> onResizeAction = CreateResizeCallback(menuRoot, data);
+
+        // Generate Edge Handles based on permissions
+        if (data.AllowResizeX)
+        {
+            CreateEdgeHandle(menuRoot, settings, onResizeAction, true, true);  // Right
+            CreateEdgeHandle(menuRoot, settings, onResizeAction, true, false); // Left
+        }
+        if (data.AllowResizeY)
+        {
+            CreateEdgeHandle(menuRoot, settings, onResizeAction, false, true);  // Top
+            CreateEdgeHandle(menuRoot, settings, onResizeAction, false, false); // Bottom
+        }
+    }
+
+    /// <summary>
+    /// Creates a single RectTransform handle and attaches NP_MenuResizer to detect drag events.
+    /// </summary>
+    private static void CreateEdgeHandle(GameObject menuRoot, ResizeSettings globalSettings, Action<Vector2> callback, bool isVertical, bool isPositiveSide)
+    {
+        GameObject handleGO = new GameObject(isVertical ? "EdgeHandle_V" : "EdgeHandle_H");
+        handleGO.transform.SetParent(menuRoot.transform, false);
+        
+        RectTransform rect = handleGO.AddComponent<RectTransform>();
+        ConfigureHandleAnchors(rect, isVertical, isPositiveSide);
+
+        // Create specific settings for this edge
+        ResizeSettings edgeSettings = globalSettings; 
+        edgeSettings.CanResizeRight = isVertical && isPositiveSide;
+        edgeSettings.CanResizeLeft = isVertical && !isPositiveSide;
+        edgeSettings.CanResizeTop = !isVertical && isPositiveSide;
+        edgeSettings.CanResizeBottom = !isVertical && !isPositiveSide;
+
+        // An alpha of 0 makes the handle invisible but still clickable (Raycast Target)
+        handleGO.AddComponent<Image>().color = new Color(0, 0, 0, 0);
+        var resizer = handleGO.AddComponent<NP_MenuResizer>();
+        resizer.Setup(menuRoot.GetComponent<RectTransform>(), edgeSettings, callback);
+    }
+
+    /// <summary>
+    /// Calculates the anchor and size of a resizing handle so it sits flush against a specific edge.
+    /// </summary>
+    private static void ConfigureHandleAnchors(RectTransform rect, bool isVertical, bool isPositiveSide)
+    {
+        if (isVertical) // Left/Right Edge
+        {
+            float x = isPositiveSide ? 1 : 0;
+            rect.anchorMin = new Vector2(x, 0);
+            rect.anchorMax = new Vector2(x, 1);
+            rect.pivot = new Vector2(x, 0.5f);
+            rect.sizeDelta = new Vector2(10, 0); // Grab area width
+        }
+        else // Top/Bottom Edge
+        {
+            float y = isPositiveSide ? 1 : 0;
+            rect.anchorMin = new Vector2(0, y);
+            rect.anchorMax = new Vector2(1, y);
+            rect.pivot = new Vector2(0.5f, y);
+            rect.sizeDelta = new Vector2(0, 10); // Grab area height
+        }
+    }
+
+    /// <summary>
+    /// Maps MenuData sizing limits to a ResizeSettings object for the NP_MenuResizer component.
+    /// </summary>
+    private static ResizeSettings CreateResizeSettings(MenuData data)
+    {
+        return new ResizeSettings
+        {
+            MinPercent = data.MinSizePercent,
+            MaxPercent = data.MaxSizePercent
+        };
+    }
+
+    /// <summary>
+    /// Generates the Action delegate that runs whenever the menu is resized.
+    /// </summary>
+    private static Action<Vector2> CreateResizeCallback(GameObject menuRoot, MenuData data)
+    {
+        return (newSize) => 
+        {
+            NpGenericMenu menu = menuRoot.GetComponent<NpGenericMenu>();
+            if (menu == null) return;
+
+            // Conditional Cell Resizing: Makes grid items scale with the window
+            GridLayoutGroup grid = menu.GetGridLayoutGroup();
+            if (grid != null && data.ShouldResizeCells)
+            {
+                float paddingX = grid.padding.left + grid.padding.right;
+                grid.cellSize = new Vector2(newSize.x - paddingX, grid.cellSize.y);
+            }
+            
+            // Rebuilds accordion components to match new width
+            NP_Accordion accordion = menuRoot.GetComponentInChildren<NP_Accordion>();
+            accordion?.RebuildLayout();
+        };
+    }
+    
+    /// <summary>
+    /// Applies the background color settings from the configuration to the menu component.
+    /// </summary>
     private static void SetColors(MenuData config, NP_Menu menu)
     {
         if (menu == null)
@@ -88,6 +214,10 @@ public static class UIMenuGenerator
         menu.backgroundImage.color = new Color(npColor.r, npColor.g, npColor.b, npColor.a);
         
     }
+
+    /// <summary>
+    /// Updates the text and button visibility on the NP_Menu based on MenuData parameters.
+    /// </summary>
     private static void SetFields(MenuData config, NP_Menu menu)
     {
         if (menu == null)
@@ -99,6 +229,9 @@ public static class UIMenuGenerator
         menu.EscapeButton.gameObject.SetActive(config.UseEscapeButton);
     }
 
+    /// <summary>
+    /// Dynamically attaches the specified script component to the menu root.
+    /// </summary>
     private static void ApplyComponent(MenuData config, GameObject rootMenuGo)
     {
         rootMenuGo.AddComponent(config.ItemType);
@@ -141,27 +274,50 @@ public static class UIMenuGenerator
         return rootGO;
     }
 
+    /// <summary>
+    /// Determines the specific MenuType (Regular, Form, Tabs) based on the ItemType provided in config.
+    /// </summary>
     private static GameObject CreateNewRootMenuGameObject(MenuData config)
     {
-        bool isSubclassOfNPGeneric = config.ItemType.Type.IsSubclassOf(typeof(NpGenericMenu));
-        bool isSubclassOfFormMenu = config.ItemType.Type.IsSubclassOf(typeof(FormMenu));
+        Type type = config.ItemType.Type;
+        
+        bool isSubclassOfNPGeneric = type.IsSubclassOf(typeof(NpGenericMenu));
+        bool isSubclassOfFormMenu = type.IsSubclassOf(typeof(FormMenu));
+        bool isSubclassOfTabsMenu = type.IsSubclassOf(typeof(TabsMenu));
 
         MenuType menuType = MenuType.Regular;
-        
-        if (isSubclassOfFormMenu)
-        {
-            menuType = MenuType.Form;
-            //if (config.MenuType.)
-            {
-                
-            }
-        }
 
-        if (isSubclassOfNPGeneric  && !isSubclassOfFormMenu)
+        if (isSubclassOfNPGeneric)
         {
             menuType = MenuType.Regular;
-        }
-        
+
+            if (isSubclassOfFormMenu)
+            {
+                menuType = MenuType.Form;
+            }
+
+            if (isSubclassOfTabsMenu)
+            {
+                // Tab menus change visual orientation based on alignment
+                switch (config.Alignment)
+                {
+                    case MenuAlignment.Left:
+                    case MenuAlignment.LeftSide:
+                        menuType = MenuType.TabsLeft;
+                        break;
+                    case MenuAlignment.Right:
+                    case MenuAlignment.RightSide:
+                        menuType = MenuType.TabsRight;
+                        break;
+                    case MenuAlignment.TopPanel:
+                        menuType = MenuType.TabsUp;
+                        break;
+                    case MenuAlignment.BottomPanel:
+                        menuType = MenuType.TabsDown;
+                        break;
+                }
+            }
+        }        
         
         return NP_MenusManager.Instance.GetNewNpMenu(config, menuType).gameObject;
     }
@@ -181,7 +337,6 @@ public static class UIMenuGenerator
         viewportRect.anchoredPosition = Vector2.zero;
 
         Image viewportImage = viewportGO.GetComponent<Image>();
-        //viewportImage.color = bgColor;
         viewportImage.raycastTarget = false;
 
         Mask viewportMask = viewportGO.GetComponent<Mask>();
@@ -267,7 +422,7 @@ public static class UIMenuGenerator
     }
 
     /// <summary>
-    /// Helper: Creates and configures a single Button item with Text.
+    /// Helper: Creates and configures a single Button item with Text (Debugging utility).
     /// </summary>
     private static void PopulateMenuItems(Transform contentParent, int count, Color itemBackgroundColor, Color itemTextColor)
     {
@@ -299,12 +454,12 @@ public static class UIMenuGenerator
             textComponent.color = itemTextColor;
             textComponent.fontSize = 20;
             textComponent.alignment = TextAnchor.MiddleCenter;
-            textComponent.font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf"); // Use a default Unity font
+            textComponent.font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");// Use a default Unity font
         }
     }
 
     /// <summary>
-    /// Helper: Sets the RectTransform properties of a UI element based on alignment and screen percentage.
+    /// Helper: Sets the RectTransform properties based on alignment and screen percentage.
     /// </summary>
     private static void SetRectTransformProperties(RectTransform rect, MenuAlignment alignment, float percent, RectTransform canvas)
     {
@@ -313,6 +468,7 @@ public static class UIMenuGenerator
         float canvasWidth = canvas.rect.width;
         float canvasHeight = canvas.rect.height;
 
+        
         switch (alignment)
         {
             case MenuAlignment.TopLeft:

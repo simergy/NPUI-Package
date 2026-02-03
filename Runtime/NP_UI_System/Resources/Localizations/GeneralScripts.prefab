@@ -259,3 +259,5 @@ MonoBehaviour:
   _npInputField: {fileID: 3932791918485193590, guid: 01e87abc24002c44fb825d7cee6bdf31, type: 3}
   _npSlider: {fileID: 7596375380633286885, guid: 21db71cbcde99e34f9abdf415fc4391c, type: 3}
   _checkBox: {fileID: 5344100355114218923, guid: bce13123f5af8bd4dba811928d02f74a, type: 3}
+  _npAccordionItem: {fileID: 614747656633963195, guid: a174442690bfa054892e8767dd2d8a85, type: 3}
+  _npAccordion: {fileID: 2534796147521281890, guid: a35baf3736260b44188f02ecf6108afa, type: 3}

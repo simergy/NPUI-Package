@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -6,20 +7,17 @@ using UnityEngine.UI;
 
 namespace NP_UI
 {
-
     public class NpGenericMenu : MonoBehaviour
     {
         protected Dictionary<string, NP_UIElements> IElementsIDDictionary = new Dictionary<string, NP_UIElements>();
         protected GameObject MenuGameObject { get; set; }
 
         [SerializeField] private NP_Label headLineText;
-        public UIMenuGenerator.GridLayoutType layoutGroup;
         public NP_Menu npMenu;
         protected ElemetsIDSystem _elementsSystem;
         protected List<GenericUIData> genericUIDatas = new List<GenericUIData>();
-        private GameObject _contentHeader;
-        private LayoutGroup _contentHeaderLayout;
 
+        private UIAnimator uiAnimator;
 
         public virtual void CloseMenu()
         {
@@ -33,6 +31,13 @@ namespace NP_UI
             MenuGameObject.SetActive(true);
         }
 
+        private void CloseMenuExceptMe(NpGenericMenu menu)
+        {
+            if (menu != this)
+            {
+                CloseMenu();
+            }
+        }
 
         public void Awake()
         {
@@ -42,19 +47,28 @@ namespace NP_UI
 
         private void InitialisationHandler()
         {
-            npMenu = GetComponent<NP_Menu>();
+            uiAnimator = gameObject.GetComponent<UIAnimator>();
+            if (uiAnimator == null)
+            {
+                uiAnimator = gameObject.AddComponent<UIAnimator>();
+            }
+
+            if (npMenu == null)
+            {
+                npMenu = GetComponent<NP_Menu>();
+            }
+
             SetID();
             if (npMenu != null)
             {
-                _contentHeader = npMenu.contentHearder;
                 MenuData menuData = npMenu.menuData;
                 if (menuData != null)
                 {
                     if (npMenu.menuData.UseEscapeButton && npMenu.EscapeButton != null)
                     {
-                        npMenu.EscapeButton.onClick.AddListener(()=>gameObject.SetActive(false));
+                        npMenu.EscapeButton.onClick.AddListener(() => gameObject.SetActive(false));
                     }
-                    
+
                     bool isAlwaysOn = menuData.IsAlwaysOn;
                     if (isAlwaysOn)
                     {
@@ -65,7 +79,6 @@ namespace NP_UI
                 {
                     Debug.Log("MenuData not found for AlwaysOnHandler for unknown menu");
                 }
-
             }
             else
             {
@@ -75,51 +88,105 @@ namespace NP_UI
 
         private void InitLayoutGroup()
         {
-            switch (layoutGroup)
+            // Add Component
+            LayoutGroup layout;
+
+            switch (npMenu.menuData.LayoutType)
             {
                 case UIMenuGenerator.GridLayoutType.Grid:
-                    _contentHeaderLayout = _contentHeader.AddComponent<GridLayoutGroup>();
+                    layout = ConfigureGridLayoutGroup();
                     break;
-                case UIMenuGenerator.GridLayoutType.Vertical:
-                    VerticalLayoutGroup vertical = _contentHeader.AddComponent<VerticalLayoutGroup>();
-                    vertical.childForceExpandHeight = false;
-                    vertical.childForceExpandWidth = false;
-                    vertical.childControlHeight = false;
-                    vertical.childControlWidth = false;
-                    vertical.spacing = 10f;
-                    
-                    break;
-                case UIMenuGenerator.GridLayoutType.Horizontal:
-                    HorizontalLayoutGroup horizontalLayoutGroup = _contentHeader.AddComponent<HorizontalLayoutGroup>();
-                    horizontalLayoutGroup.childForceExpandHeight = false;
-                    horizontalLayoutGroup.childForceExpandWidth = false;
-                    horizontalLayoutGroup.childControlHeight = false;
-                    horizontalLayoutGroup.childControlWidth = false;
-                    horizontalLayoutGroup.spacing = 10f;
-                    break;
-            }
 
+                case UIMenuGenerator.GridLayoutType.Vertical:
+                    layout = ConfigureLinearParent<VerticalLayoutGroup>();
+                    break;
+
+                case UIMenuGenerator.GridLayoutType.Horizontal:
+                    layout = ConfigureLinearParent<HorizontalLayoutGroup>();
+                    break;
+                default:
+                    return;
+            }
+            
+            // Resize all elements
             foreach (GenericUIData genericUIData in genericUIDatas)
             {
-                genericUIData.GetUIElement().SetSize();
+                genericUIData.GetUIElement()?.SetSize();
             }
+        }
+        
+        private T ConfigureLinearParent<T>() where T : HorizontalOrVerticalLayoutGroup
+        {
+            T group = npMenu.contentHearder.AddComponent<T>();
+            group.childForceExpandHeight = false;
+            group.childForceExpandWidth = false;
+            group.childControlHeight = false;
+            group.childControlWidth = false;
+            group.spacing = npMenu.menuData.LayoutSpacing;
+            return group;
+        }
+        private GridLayoutGroup ConfigureGridLayoutGroup()
+        {
+            GridLayoutGroup group = npMenu.contentHearder.AddComponent<GridLayoutGroup>();
+            group.cellSize = npMenu.menuData.ItemCellSize;
+            group.spacing = npMenu.menuData.ItemSpacing;
+            group.padding = npMenu.menuData.GridPadding;
+            group.childAlignment = npMenu.menuData.GridChildAlignment;
+            group.constraint = npMenu.menuData.GridLayoutConstraint;
+            group.constraintCount = npMenu.menuData.GridLayoutConstraintCount;
+            return group;
         }
 
         protected void SetEscapeButtonAction(UnityAction unityAction)
         {
-            npMenu.EscapeButton.onClick.RemoveAllListeners();
-            npMenu.EscapeButton.onClick.AddListener(unityAction);
+            if (npMenu.EscapeButton)
+            {
+                npMenu.EscapeButton.onClick.RemoveAllListeners();
+                npMenu.EscapeButton.onClick.AddListener(unityAction);
+            }
         }
-        
-        protected void ClearUI(bool clearData = true)
+
+        protected void SetEscapeButtonTexture(Texture texture)
+        {
+            if (npMenu.EscapeButton)
+            {
+                npMenu.EscapeButton.GetComponent<RawImage>().texture = texture;
+            }
+        }
+
+        protected void RotateEscapeButton(Vector2 rotation)
+        {
+            RectTransform rectTransform = npMenu.EscapeButton.GetComponent<RectTransform>();
+            rectTransform.Rotate(rectTransform.localEulerAngles + new Vector3(rotation.x, rotation.y, 0), Space.Self);
+        }
+
+        protected void SetEscapeButtonText(Image image)
+        {
+        }
+
+        public void ClearUI(bool clearData = true, bool clearTabs = true)
         {
             if (IElementsIDDictionary != null && IElementsIDDictionary.Count > 0)
             {
-                foreach (NP_UIElements element in IElementsIDDictionary.Values)
+                if (!clearTabs)
                 {
-                    if (element != null)
+                    List<GenericUIData> tabDatas = genericUIDatas.Where(x => x is TabData).ToList();
+                    foreach (NP_UIElements element in IElementsIDDictionary.Values)
                     {
-                        Destroy(element.gameObject);
+                        if (element != null && tabDatas.Find(x => x.GetUIElement() == element) == null)
+                        {
+                            Destroy(element.gameObject);
+                        }
+                    }
+                }
+                else
+                {
+                    foreach (NP_UIElements element in IElementsIDDictionary.Values)
+                    {
+                        if (element != null)
+                        {
+                            Destroy(element.gameObject);
+                        }
                     }
                 }
 
@@ -131,9 +198,9 @@ namespace NP_UI
             }
         }
 
-        protected void CreateUI()
+        protected virtual void CreateUI()
         {
-            SetFields();
+            SetFields(npMenu);
             CreateMenuItems();
             AddElementsByDataToMenu(genericUIDatas, _elementsSystem);
             AddListeners();
@@ -145,12 +212,12 @@ namespace NP_UI
             if (!npMenu.menuData.IsAlwaysOn)
             {
                 NP_EventsManager.CloseAllMenus.AddListener(CloseMenu);
+                NP_EventsManager.CloseAllMenusExceptMe.AddListener(CloseMenuExceptMe);
             }
         }
 
         public virtual void StartAfterCreation()
         {
-            
         }
 
         public void InitializeMenu(NP_UIMenuData menuData)
@@ -161,7 +228,12 @@ namespace NP_UI
 
         public void SetFields(NP_Menu npMenu)
         {
+            _elementsSystem = new ElemetsIDSystem(npMenu.menuData.MenuName);
             headLineText = npMenu.headLineText;
+            if (MenuGameObject == null)
+            {
+                MenuGameObject = gameObject;
+            }
         }
 
         private void SetFields()
@@ -180,7 +252,7 @@ namespace NP_UI
 
         public void AddElementToMenu(NP_UIElements element)
         {
-            element.transform.SetParent(_contentHeader.transform, false);
+            element.transform.SetParent(npMenu.contentHearder.transform, false);
         }
 
         public void AddListOfElementsToMenu(List<NP_UIElements> elements)
@@ -193,7 +265,7 @@ namespace NP_UI
 
             foreach (var element in elements)
             {
-                element.transform.SetParent(_contentHeader.transform, false);
+                element.transform.SetParent(npMenu.contentHearder.transform, false);
             }
         }
 
@@ -204,23 +276,22 @@ namespace NP_UI
                 Debug.Log("Menu has no elements");
                 return;
             }
-            
+
             foreach (var element in elements)
             {
-
                 elementsSystem.SetElementID(element);
                 NP_UIElements uiElement = NP_MenuDesignData.Instance.CreateUIElementByData(element);
-                
+
                 element.SetValue(uiElement);
 
                 if (!IElementsIDDictionary.ContainsKey(element.ID))
                 {
                     IElementsIDDictionary.Add(element.ID, uiElement);
                 }
-                
+
                 if (uiElement != null)
                 {
-                    uiElement.transform.SetParent(_contentHeader.transform, false);
+                    uiElement.transform.SetParent(npMenu.contentHearder.transform, false);
                 }
                 else
                 {
@@ -228,7 +299,7 @@ namespace NP_UI
                 }
             }
         }
-        
+
         protected NP_UIElements GetElementByID(string elementID)
         {
             NP_UIElements[] elements = GetComponentsInChildren<NP_UIElements>(true);
@@ -257,6 +328,16 @@ namespace NP_UI
         {
         }
 
+        protected void HideAndShowHeadLine(bool toEnable)
+        {
+            headLineText.SetText(String.Empty);
+        }
+
+        protected void HideAndShowHeadLine()
+        {
+            headLineText.SetText(headLineText.GetText() == string.Empty ? npMenu.menuData.MenuName : string.Empty);
+        }
+
         /// <summary>
         /// Generic function to retrieve a specific UI element by its data ID.
         /// </summary>
@@ -274,6 +355,7 @@ namespace NP_UI
                 Debug.LogError("Element can't be null or empty");
                 return null;
             }
+
             if (IElementsIDDictionary.ContainsKey(elementData.ID))
             {
                 NP_UIElements foundElement = IElementsIDDictionary[elementData.ID];
@@ -298,12 +380,20 @@ namespace NP_UI
                 return null;
             }
         }
-    }
 
-    //public interface ICreatableMenu
-    //{
-    //    void CreateMenuItems();
-//
-    //    void StartAfterCreation();
-    //}
+        protected void TransitMenuTo(Vector2 target, float duration = 0.3f)
+        {
+            uiAnimator.MoveTo(target, duration);
+        }
+
+        protected void TransitMenuToStart(float duration = 0.3f)
+        {
+            uiAnimator.MoveToStart(duration);
+        }
+
+        public GridLayoutGroup GetGridLayoutGroup()
+        {
+            return GetComponent<GridLayoutGroup>();
+        }
+    }
 }

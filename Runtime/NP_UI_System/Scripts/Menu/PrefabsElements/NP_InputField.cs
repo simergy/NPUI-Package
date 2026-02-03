@@ -24,7 +24,6 @@ public class NP_InputField : NP_UIElements, ITextableElement
     {
         if (listener == null)
         {
-            Debug.LogWarning("[NP_InputField] Listener is null");
             return;
         }
         inputField.onValueChanged.AddListener(listener);

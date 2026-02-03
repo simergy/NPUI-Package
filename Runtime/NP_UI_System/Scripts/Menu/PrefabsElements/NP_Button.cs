@@ -48,6 +48,14 @@ namespace NP_UI
                 buttonComponent.onClick.AddListener(onClickAction);
             }
         }
+        
+        public void AddOnClick(UnityAction onClickAction)
+        {
+            if (buttonComponent != null)
+            {
+                buttonComponent.onClick.AddListener(onClickAction);
+            }
+        }
 
         public void SetBackgroundImage(Sprite texture)
         {

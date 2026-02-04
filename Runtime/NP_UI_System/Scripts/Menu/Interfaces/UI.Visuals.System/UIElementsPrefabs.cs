@@ -70,8 +70,10 @@ public class NP_UIElements : MonoBehaviour
         return GetComponent<T>();
     }
 
-    public void SetSize()
+    public void SetSize(Vector2 newSize = default(Vector2))
     {
+        if (newSize != default(Vector2))
+            size = newSize;
         uiRectTransform.sizeDelta = size;
     }
 }

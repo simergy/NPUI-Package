@@ -118,16 +118,19 @@ namespace NP_UI
         private T ConfigureLinearParent<T>() where T : HorizontalOrVerticalLayoutGroup
         {
             T group = npMenu.contentHearder.AddComponent<T>();
+            if (group == null) {return null;}
             group.childForceExpandHeight = false;
             group.childForceExpandWidth = false;
             group.childControlHeight = false;
             group.childControlWidth = false;
             group.spacing = npMenu.menuData.LayoutSpacing;
+            group.padding = npMenu.menuData.GridPadding;
             return group;
         }
         private GridLayoutGroup ConfigureGridLayoutGroup()
         {
             GridLayoutGroup group = npMenu.contentHearder.AddComponent<GridLayoutGroup>();
+            if (group == null) {return null;}
             group.cellSize = npMenu.menuData.ItemCellSize;
             group.spacing = npMenu.menuData.ItemSpacing;
             group.padding = npMenu.menuData.GridPadding;

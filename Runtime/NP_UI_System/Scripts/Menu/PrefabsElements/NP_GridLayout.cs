@@ -39,6 +39,13 @@ public class NP_GridLayout : NP_UIElements
             gridLayoutGroup.spacing = spacing;
         }
     }
+    public void SetChildAlignment(TextAnchor alignment)
+    {
+        if (alignment != null)
+        {
+            gridLayoutGroup.childAlignment = alignment;
+        }
+    }
 
     public void SetStartCorner(GridLayoutGroup.Corner corner)
     {

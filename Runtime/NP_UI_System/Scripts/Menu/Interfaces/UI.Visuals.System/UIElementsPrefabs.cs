@@ -43,11 +43,12 @@ public class NP_UIElements : MonoBehaviour
 {
     public string ID;
 
-    public Vector2 size;
+    private Vector2 size;
     // A reference to the base UIElements component.
     // This could be used to cache references to common UI components like RectTransform.
     protected RectTransform uiRectTransform; // Common for all UI elements
 
+    public Vector2 Size => size;
     /// <summary>
     /// Called when the script instance is being loaded.
     /// Good for initializing references.

@@ -4,6 +4,7 @@ using DA_Assets.Extensions;
 using NP_UI;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.UIElements;
 
 public class NP_MenuDesignData : Singleton<NP_MenuDesignData>
 {
@@ -25,6 +26,7 @@ public class NP_MenuDesignData : Singleton<NP_MenuDesignData>
     public NP_Button CreateButton(UnityAction clickAction, string text)
     {
         NP_Button npButton = Instantiate(_npButton, Vector3.zero, Quaternion.identity);
+        npButton.SetSize(new Vector2(100f, 100f));
         npButton.SetOnClick(clickAction);
         npButton.SetText(text);
         return npButton;
@@ -33,8 +35,7 @@ public class NP_MenuDesignData : Singleton<NP_MenuDesignData>
     public NP_Button CreateButton(GenericUIData uiData)
     {
         NP_Button npButton = Instantiate(_npButton, Vector3.zero, Quaternion.identity);
-        
-        // Removed unnecessary reassignment: GenericUIData buttonData = uiData;
+        npButton.SetSize(uiData.size);
         bool isPictureButton;
         bool isTextButton;
         
@@ -47,6 +48,7 @@ public class NP_MenuDesignData : Singleton<NP_MenuDesignData>
             HandleUIGenericButton(npButton, (ButtonData)uiData, out isPictureButton, out isTextButton);
         }
         
+
         return npButton;
     }
 
@@ -172,6 +174,15 @@ public class NP_MenuDesignData : Singleton<NP_MenuDesignData>
         npCheckBox.SetImageButtonOnClick(checkBoxData.OnImageButtonClick);
         return npCheckBox;
     }
+    private NP_UIElements CreateGridLayout(GenericUIData uiData)
+    {
+        GridLayoutData gridLayoutData = uiData as GridLayoutData;
+        NP_GridLayout npGridLayout = Instantiate(_npGridLayout, Vector3.zero, Quaternion.identity);
+        npGridLayout.SetCellSize(gridLayoutData.cellSize);
+        npGridLayout.SetPadding(gridLayoutData.padding);
+        npGridLayout.SetSpacing(gridLayoutData.spacing);
+        return npGridLayout;
+    }
     
     // NOTE: This factory method assumes the calling code (the Menu View/Controller) 
     // will set the parent transform of the returned NP_AccordionItem immediately.
@@ -284,6 +295,10 @@ public class NP_MenuDesignData : Singleton<NP_MenuDesignData>
         {
             npUIElements = CreateCheckBox(uiData);
         }
+        if (typeOfData == typeof(GridLayoutData))
+        {
+            npUIElements = CreateGridLayout(uiData);
+        }
         else if (typeOfData == typeof(TabData))
         {
             npUIElements = CreateButton(uiData);
@@ -299,4 +314,8 @@ public class NP_MenuDesignData : Singleton<NP_MenuDesignData>
         }
         return npUIElements;
     }
+
+
 }
+
+

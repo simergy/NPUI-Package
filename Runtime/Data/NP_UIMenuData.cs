@@ -66,6 +66,7 @@ using UnityEngine.Events;
     public abstract class GenericUIData : ISetterable
     {
         public string ID;
+        public Vector2 size;
 
         protected NP_UIElements UIElement;
 
@@ -150,33 +151,37 @@ using UnityEngine.Events;
         public UnityEngine.Color BackgroundColor;
         public UnityEngine.Sprite MenuIcon;
 
-        public ButtonData(UnityAction onClick, string textButton)
+        public ButtonData(UnityAction onClick, string textButton, Vector2 size = default(Vector2))
         {
             ClickAction = onClick;
             Text = textButton;
             MenuIcon = null;
+            this.size = size;
         }
 
-        public ButtonData(UnityAction onClick, UnityEngine.Sprite menuIcon)
+        public ButtonData(UnityAction onClick, UnityEngine.Sprite menuIcon, Vector2 size = default(Vector2))
         {
             ClickAction = onClick;
             MenuIcon = menuIcon;
             Text = String.Empty;
+            this.size = size;
         }
 
-        public ButtonData(UnityAction onClick, UnityEngine.Sprite menuIcon, string text)
+        public ButtonData(UnityAction onClick, UnityEngine.Sprite menuIcon, string text, Vector2 size = default(Vector2))
         {
             ClickAction = onClick;
             MenuIcon = menuIcon;
             Text = text;
+            this.size = size;
         }
 
-        public ButtonData(UnityAction onClick, string text, UnityEngine.Color backgroundColor)
+        public ButtonData(UnityAction onClick, string text, UnityEngine.Color backgroundColor, Vector2 size = default(Vector2))
         {
             ClickAction = onClick;
             MenuIcon = null;
             Text = text;
             BackgroundColor = backgroundColor;
+            this.size = size;
         }
 
         protected ButtonData()
@@ -480,8 +485,34 @@ using UnityEngine.Events;
         {
             return UIElement;
         }
-        
-        
-        
+    }
+    
+    public class GridLayoutData : GenericUIData
+    {
+        public Vector2 gridSize;
+        public Vector2 cellSize;
+        public RectOffset padding;
+        public Vector2 spacing;
+        public GridLayoutData(Vector2 cellSize)
+        {
+            this.cellSize = cellSize;
+        }
 
+        public GridLayoutData(Vector2 cellSize, Vector2 spacing)
+        {
+            this.cellSize = cellSize;
+            this.spacing = spacing;
+        }
+
+        public GridLayoutData(Vector2 cellSize, Vector2 spacing, RectOffset padding)
+        {
+            this.cellSize = cellSize;
+            this.spacing = spacing;
+            this.padding = padding;
+        }
+
+        public override NP_UIElements GetUIElement()
+        {
+            return UIElement;
+        }
     }

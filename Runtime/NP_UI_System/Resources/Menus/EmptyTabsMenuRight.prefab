@@ -69,13 +69,11 @@ MonoBehaviour:
         - TextMeshPro Urbanist-Regular-36-LeftTop-Black255
         - txt - welcome
         - style-txt - welcome-347222481
-    tags: c800000065000000
-    fcuImageType: 0
-    buttonComponent: 0
-    childIndexes: 
-    fcu: {fileID: 0}
     gameObject: {fileID: 592807669697671462}
-    hash: 347222481
+    fcu: {fileID: 0}
+    rootFrameGO: {fileID: 1830339034517162169}
+    parentIndex: 0
+    childIndexes: 
     hierarchy:
     - Index: -1
       Name: Login Screen - Test
@@ -86,9 +84,15 @@ MonoBehaviour:
     - Index: 1
       Name: txt - welcome
       Guid: 4d04b76a0597443e89c3fcf8cbe63ee8
-    rootFrameGO: {fileID: 1830339034517162169}
-    hashDataTree: 
-    parentIndex: 0
+    tags: c800000065000000
+    tagReasons: []
+    fcuImageType: 0
+    buttonComponent: 0
+    rect:
+      position: {x: 0, y: 0}
+      size: {x: 0, y: 0}
+      angle: 0
+      absoluteAngle: 0
     uguiTransformData:
       anchorMin: {x: 0, y: 0}
       anchorMax: {x: 0, y: 0}
@@ -97,6 +101,8 @@ MonoBehaviour:
       localRotation: {x: 0, y: 0, z: 0, w: 0}
       localPosition: {x: 0, y: 0, z: 0}
       localScale: {x: 0, y: 0, z: 0}
+    parentTransform: {fileID: 0}
+    parentTransformRect: {fileID: 0}
     graphic:
       hasFill: 0
       hasStroke: 0
@@ -114,35 +120,26 @@ MonoBehaviour:
         singleColor: {r: 0, g: 0, b: 0, a: 0}
       spriteSingleColor: {r: 0, g: 0, b: 0, a: 0}
       fillAlpha1: 0
-    rectGameObject: {fileID: 0}
-    spriteSize: {x: 0, y: 0}
-    rect:
-      _position: {x: 0, y: 0}
-      _size: {x: 0, y: 0}
-      _angle: 0
-      _absoluteAngle: 0
     spritePath: 
+    spriteSize: {x: 0, y: 0}
+    maxSpriteSize: {x: 0, y: 0}
+    imageFormat: 0
+    scale: 0
     link: 
-    tagReasons: []
-    downloadableReason: 
-    generativeReason: 
-    downloadAttempsCount: 0
-    isDuplicate: 0
-    isMutual: 0
-    isEmpty: 0
     needDownload: 0
     needGenerate: 0
     forceImage: 0
-    isOverlappedByStroke: 0
     forceContainer: 0
+    isMutual: 0
+    isEmpty: 0
+    isOverlappedByStroke: 0
     isInsideDownloadable: 0
     hasFontAsset: 0
-    imageFormat: 0
-    scale: 0
-    maxSpriteSize: {x: 0, y: 0}
-    parentTransformRect: {fileID: 0}
-    parentTransform: {fileID: 0}
-    partOfPrefab: 0
+    hash: 347222481
+    downloadableReason: 
+    generativeReason: 
+    downloadAttempsCount: 0
+    rectGameObject: {fileID: 0}
 --- !u!114 &456088099941284142
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -529,20 +526,24 @@ MonoBehaviour:
         - 
         - Login Screen - Test
         - style-Login Screen - Test-1820204460
-    tags: 02000000f6010000c900000001000000
-    fcuImageType: 2
-    buttonComponent: 0
-    childIndexes: 01000000020000000300000004000000
-    fcu: {fileID: 0}
     gameObject: {fileID: 1830339034517162169}
-    hash: 1820204460
+    fcu: {fileID: 0}
+    rootFrameGO: {fileID: 1830339034517162169}
+    parentIndex: 0
+    childIndexes: 01000000020000000300000004000000
     hierarchy:
     - Index: -1
       Name: Login Screen - Test
       Guid: 70b30d4c108c48c5acf5d02b63bd9ac7
-    rootFrameGO: {fileID: 1830339034517162169}
-    hashDataTree: 
-    parentIndex: 0
+    tags: 02000000f6010000c900000001000000
+    tagReasons: []
+    fcuImageType: 2
+    buttonComponent: 0
+    rect:
+      position: {x: 0, y: 0}
+      size: {x: 0, y: 0}
+      angle: 0
+      absoluteAngle: 0
     uguiTransformData:
       anchorMin: {x: 0, y: 0}
       anchorMax: {x: 0, y: 0}
@@ -551,6 +552,8 @@ MonoBehaviour:
       localRotation: {x: 0, y: 0, z: 0, w: 0}
       localPosition: {x: 0, y: 0, z: 0}
       localScale: {x: 0, y: 0, z: 0}
+    parentTransform: {fileID: 0}
+    parentTransformRect: {fileID: 0}
     graphic:
       hasFill: 0
       hasStroke: 0
@@ -568,35 +571,26 @@ MonoBehaviour:
         singleColor: {r: 0, g: 0, b: 0, a: 0}
       spriteSingleColor: {r: 0, g: 0, b: 0, a: 0}
       fillAlpha1: 0
-    rectGameObject: {fileID: 0}
-    spriteSize: {x: 0, y: 0}
-    rect:
-      _position: {x: 0, y: 0}
-      _size: {x: 0, y: 0}
-      _angle: 0
-      _absoluteAngle: 0
     spritePath: 
+    spriteSize: {x: 0, y: 0}
+    maxSpriteSize: {x: 0, y: 0}
+    imageFormat: 0
+    scale: 0
     link: 
-    tagReasons: []
-    downloadableReason: 
-    generativeReason: 
-    downloadAttempsCount: 0
-    isDuplicate: 0
-    isMutual: 0
-    isEmpty: 0
     needDownload: 0
     needGenerate: 0
     forceImage: 0
-    isOverlappedByStroke: 0
     forceContainer: 0
+    isMutual: 0
+    isEmpty: 0
+    isOverlappedByStroke: 0
     isInsideDownloadable: 0
     hasFontAsset: 0
-    imageFormat: 0
-    scale: 0
-    maxSpriteSize: {x: 0, y: 0}
-    parentTransformRect: {fileID: 0}
-    parentTransform: {fileID: 0}
-    partOfPrefab: 0
+    hash: 1820204460
+    downloadableReason: 
+    generativeReason: 
+    downloadAttempsCount: 0
+    rectGameObject: {fileID: 0}
 --- !u!222 &833640050637343749
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -661,7 +655,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   headLineText: {fileID: 600476254661733010}
-  gridLayoutGroup: {fileID: 8393815886317933167}
+  contentHearder: {fileID: 2700988147601269304}
   viewPort: {fileID: 1024810047202745642}
   scrollRect: {fileID: 4320702323056000722}
   backgroundImage: {fileID: 9166254710163904903}
@@ -677,6 +671,7 @@ MonoBehaviour:
     Alignment: 0
     ScreenCoveragePercent: 0.01
     LayoutType: 0
+    LayoutSpacing: 0
     ItemCellSize: {x: 0, y: 0}
     ItemSpacing: {x: 0, y: 0}
     GridPadding:
@@ -692,6 +687,11 @@ MonoBehaviour:
     ItemBackgroundColor: {r: 0, g: 0, b: 0, a: 0}
     ItemTextColor: {r: 0, g: 0, b: 0, a: 0}
     IsBackgroundPanelVisible: 0
+    AllowResizeX: 0
+    AllowResizeY: 0
+    MinSizePercent: {x: 0, y: 0}
+    MaxSizePercent: {x: 0, y: 0}
+    ShouldResizeCells: 0
     TypeOfMenu: 0
     TypeOfFormMenu: 0
     UseEscapeButton: 0
@@ -832,8 +832,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 9166951979375475465}
-  - component: {fileID: 8393815886317933167}
-  - component: {fileID: 5034139547019324310}
+  - component: {fileID: 356008077681984646}
+  - component: {fileID: 289325907200848215}
   m_Layer: 5
   m_Name: Content
   m_TagString: Untagged
@@ -857,10 +857,10 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0.000061035156}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
---- !u!114 &8393815886317933167
+--- !u!114 &356008077681984646
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -869,7 +869,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 2700988147601269304}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8a8695521f0d02e499659fee002a26c2, type: 3}
+  m_Script: {fileID: 11500000, guid: 59f8146938fff824cb5fd77236b75775, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_Padding:
@@ -878,13 +878,15 @@ MonoBehaviour:
     m_Top: 0
     m_Bottom: 0
   m_ChildAlignment: 0
-  m_StartCorner: 0
-  m_StartAxis: 1
-  m_CellSize: {x: 265, y: 70}
-  m_Spacing: {x: 10, y: 10}
-  m_Constraint: 1
-  m_ConstraintCount: 1
---- !u!114 &5034139547019324310
+  m_Spacing: 50
+  m_ChildForceExpandWidth: 0
+  m_ChildForceExpandHeight: 0
+  m_ChildControlWidth: 0
+  m_ChildControlHeight: 0
+  m_ChildScaleWidth: 0
+  m_ChildScaleHeight: 0
+  m_ReverseArrangement: 0
+--- !u!114 &289325907200848215
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -896,7 +898,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3245ec927659c4140ac4f8d17403cc18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_HorizontalFit: 0
+  m_HorizontalFit: 2
   m_VerticalFit: 2
 --- !u!1 &3203644945484309437
 GameObject:
@@ -1253,7 +1255,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6713407245223348962}
-  - component: {fileID: 657835897536907956}
+  - component: {fileID: 3754822750848011064}
+  - component: {fileID: 7792994915676979830}
   m_Layer: 5
   m_Name: Content
   m_TagString: Untagged
@@ -1280,7 +1283,21 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
---- !u!114 &657835897536907956
+--- !u!114 &3754822750848011064
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5298633179738419259}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3245ec927659c4140ac4f8d17403cc18, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_HorizontalFit: 2
+  m_VerticalFit: 2
+--- !u!114 &7792994915676979830
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1293,15 +1310,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Padding:
-    m_Left: -60
+    m_Left: 0
     m_Right: 0
-    m_Top: 20
+    m_Top: 0
     m_Bottom: 0
   m_ChildAlignment: 0
   m_StartCorner: 0
-  m_StartAxis: 1
-  m_CellSize: {x: 180, y: 55.1}
-  m_Spacing: {x: 10, y: 127.69}
+  m_StartAxis: 0
+  m_CellSize: {x: 80, y: 80}
+  m_Spacing: {x: 0, y: 20}
   m_Constraint: 1
   m_ConstraintCount: 1
 --- !u!1 &5392298884072527151
@@ -1501,7 +1518,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a2d9da5940d0dee4889a07d739463abe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gridLayoutGroup: {fileID: 657835897536907956}
+  gridLayoutGroup: {fileID: 7792994915676979830}
   viewPort: {fileID: 5683511389805306702}
   scrollRect: {fileID: 5991725496329241455}
 --- !u!1 &5582063162709043231
@@ -1738,13 +1755,11 @@ MonoBehaviour:
         - 
         - Login Container
         - style-Login Container-509074146
-    tags: 01000000
-    fcuImageType: 0
-    buttonComponent: 0
-    childIndexes: 0500000006000000070000000f000000170000001f00000025000000
-    fcu: {fileID: 0}
     gameObject: {fileID: 5848833215984368147}
-    hash: -509074146
+    fcu: {fileID: 0}
+    rootFrameGO: {fileID: 1830339034517162169}
+    parentIndex: 0
+    childIndexes: 0500000006000000070000000f000000170000001f00000025000000
     hierarchy:
     - Index: -1
       Name: Login Screen - Test
@@ -1752,9 +1767,15 @@ MonoBehaviour:
     - Index: 3
       Name: Login Container
       Guid: 8f6dc1907d0b4c0fb81418e50afa5164
-    rootFrameGO: {fileID: 1830339034517162169}
-    hashDataTree: 
-    parentIndex: 0
+    tags: 01000000
+    tagReasons: []
+    fcuImageType: 0
+    buttonComponent: 0
+    rect:
+      position: {x: 0, y: 0}
+      size: {x: 0, y: 0}
+      angle: 0
+      absoluteAngle: 0
     uguiTransformData:
       anchorMin: {x: 0, y: 0}
       anchorMax: {x: 0, y: 0}
@@ -1763,6 +1784,8 @@ MonoBehaviour:
       localRotation: {x: 0, y: 0, z: 0, w: 0}
       localPosition: {x: 0, y: 0, z: 0}
       localScale: {x: 0, y: 0, z: 0}
+    parentTransform: {fileID: 0}
+    parentTransformRect: {fileID: 0}
     graphic:
       hasFill: 0
       hasStroke: 0
@@ -1780,35 +1803,26 @@ MonoBehaviour:
         singleColor: {r: 0, g: 0, b: 0, a: 0}
       spriteSingleColor: {r: 0, g: 0, b: 0, a: 0}
       fillAlpha1: 0
-    rectGameObject: {fileID: 0}
-    spriteSize: {x: 0, y: 0}
-    rect:
-      _position: {x: 0, y: 0}
-      _size: {x: 0, y: 0}
-      _angle: 0
-      _absoluteAngle: 0
     spritePath: 
+    spriteSize: {x: 0, y: 0}
+    maxSpriteSize: {x: 0, y: 0}
+    imageFormat: 0
+    scale: 0
     link: 
-    tagReasons: []
-    downloadableReason: 
-    generativeReason: 
-    downloadAttempsCount: 0
-    isDuplicate: 0
-    isMutual: 0
-    isEmpty: 0
     needDownload: 0
     needGenerate: 0
     forceImage: 0
-    isOverlappedByStroke: 0
     forceContainer: 0
+    isMutual: 0
+    isEmpty: 0
+    isOverlappedByStroke: 0
     isInsideDownloadable: 0
     hasFontAsset: 0
-    imageFormat: 0
-    scale: 0
-    maxSpriteSize: {x: 0, y: 0}
-    parentTransformRect: {fileID: 0}
-    parentTransform: {fileID: 0}
-    partOfPrefab: 0
+    hash: -509074146
+    downloadableReason: 
+    generativeReason: 
+    downloadAttempsCount: 0
+    rectGameObject: {fileID: 0}
 --- !u!1 &5988469097713366218
 GameObject:
   m_ObjectHideFlags: 0
@@ -2203,13 +2217,11 @@ MonoBehaviour:
         - 
         - img - rectangle 4x 1069162574.png
         - style-img - rectangle-1069162574
-    tags: c9000000
-    fcuImageType: 1
-    buttonComponent: 0
-    childIndexes: 
-    fcu: {fileID: 0}
     gameObject: {fileID: 9005076445090047271}
-    hash: 1069162574
+    fcu: {fileID: 0}
+    rootFrameGO: {fileID: 1830339034517162169}
+    parentIndex: 0
+    childIndexes: 
     hierarchy:
     - Index: -1
       Name: Login Screen - Test
@@ -2220,9 +2232,15 @@ MonoBehaviour:
     - Index: 0
       Name: img - rectangle
       Guid: b12b1be753e541e5969936dfb215e801
-    rootFrameGO: {fileID: 1830339034517162169}
-    hashDataTree: 
-    parentIndex: 0
+    tags: c9000000
+    tagReasons: []
+    fcuImageType: 1
+    buttonComponent: 0
+    rect:
+      position: {x: 0, y: 0}
+      size: {x: 0, y: 0}
+      angle: 0
+      absoluteAngle: 0
     uguiTransformData:
       anchorMin: {x: 0, y: 0}
       anchorMax: {x: 0, y: 0}
@@ -2231,6 +2249,8 @@ MonoBehaviour:
       localRotation: {x: 0, y: 0, z: 0, w: 0}
       localPosition: {x: 0, y: 0, z: 0}
       localScale: {x: 0, y: 0, z: 0}
+    parentTransform: {fileID: 0}
+    parentTransformRect: {fileID: 0}
     graphic:
       hasFill: 0
       hasStroke: 0
@@ -2248,35 +2268,26 @@ MonoBehaviour:
         singleColor: {r: 0, g: 0, b: 0, a: 0}
       spriteSingleColor: {r: 0, g: 0, b: 0, a: 0}
       fillAlpha1: 0
-    rectGameObject: {fileID: 0}
-    spriteSize: {x: 0, y: 0}
-    rect:
-      _position: {x: 0, y: 0}
-      _size: {x: 0, y: 0}
-      _angle: 0
-      _absoluteAngle: 0
     spritePath: 
+    spriteSize: {x: 0, y: 0}
+    maxSpriteSize: {x: 0, y: 0}
+    imageFormat: 0
+    scale: 0
     link: 
-    tagReasons: []
-    downloadableReason: 
-    generativeReason: 
-    downloadAttempsCount: 0
-    isDuplicate: 0
-    isMutual: 0
-    isEmpty: 0
     needDownload: 0
     needGenerate: 0
     forceImage: 0
-    isOverlappedByStroke: 0
     forceContainer: 0
+    isMutual: 0
+    isEmpty: 0
+    isOverlappedByStroke: 0
     isInsideDownloadable: 0
     hasFontAsset: 0
-    imageFormat: 0
-    scale: 0
-    maxSpriteSize: {x: 0, y: 0}
-    parentTransformRect: {fileID: 0}
-    parentTransform: {fileID: 0}
-    partOfPrefab: 0
+    hash: 1069162574
+    downloadableReason: 
+    generativeReason: 
+    downloadAttempsCount: 0
+    rectGameObject: {fileID: 0}
 --- !u!222 &3275991400910934439
 CanvasRenderer:
   m_ObjectHideFlags: 0

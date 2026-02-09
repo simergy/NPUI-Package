@@ -23,6 +23,7 @@ namespace NP_UI
         {
             base.Awake();
             buttonComponent = GetComponent<Button>();
+            uiRectTransform.sizeDelta = Size;
             if (buttonComponent == null)
             {
                 Debug.LogError("NP_Button requires a Button component on its GameObject.", this);

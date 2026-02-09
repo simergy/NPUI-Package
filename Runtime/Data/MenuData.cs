@@ -17,7 +17,6 @@ public class MenuData : IEquatable<MenuData>
     public string MenuName = "New_Dynamic_Menu";
     public Sprite ItemIcon;
     public bool IsAlwaysOn;
-
     public MenuType MenuType;
     
     public UIMenuGenerator.MenuAlignment Alignment = UIMenuGenerator.MenuAlignment.RightSide;
@@ -26,7 +25,7 @@ public class MenuData : IEquatable<MenuData>
     public float ScreenCoveragePercent = 0.25f;
 
     public UIMenuGenerator.GridLayoutType LayoutType = UIMenuGenerator.GridLayoutType.Vertical;
-
+    public float LayoutSpacing = 10f;
     public Vector2 ItemCellSize = new Vector2(120, 40);
     public Vector2 ItemSpacing = new Vector2(10, 10);
 

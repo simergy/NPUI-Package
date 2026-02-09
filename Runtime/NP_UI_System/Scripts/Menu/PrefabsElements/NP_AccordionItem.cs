@@ -354,6 +354,7 @@ public class NP_AccordionItem : NP_UIElements, ITextableElement, IClickableEleme
     /// </summary>
     /// <returns>The list of children.</returns>
     public List<NP_AccordionItem> GetChildren() => childAccordions;
+    public NP_AccordionItem GetParent() => parentAccordion;
 
     /// <inheritdoc />
     public void SetBackgroundColor(Color color)

@@ -74,7 +74,6 @@ public static class UIMenuGenerator
         RectTransform contentRect = CreateContent(rootMenuGO.GetComponent<NP_Menu>(), viewportRect);
 
         AddContentSizeFitter(contentRect, config.LayoutType);
-        // AddGridLayoutGroup(config, contentRect);
 
         NP_Menu npMenu = rootMenuGO.GetComponent<NP_Menu>();
         SetFields(config, npMenu);
@@ -389,7 +388,10 @@ public static class UIMenuGenerator
     private static void AddContentSizeFitter(RectTransform targetRect, GridLayoutType layoutType)
     {
         ContentSizeFitter contentSizeFitter = targetRect.gameObject.GetComponent<ContentSizeFitter>();
-        if (!contentSizeFitter) return;
+        if (!contentSizeFitter)
+        {
+            return;
+        }
         contentSizeFitter.horizontalFit = (layoutType == GridLayoutType.Horizontal || layoutType == GridLayoutType.Grid) ? ContentSizeFitter.FitMode.PreferredSize : ContentSizeFitter.FitMode.Unconstrained;
         contentSizeFitter.verticalFit = (layoutType == GridLayoutType.Vertical || layoutType == GridLayoutType.Grid) ? ContentSizeFitter.FitMode.PreferredSize : ContentSizeFitter.FitMode.Unconstrained;
     }

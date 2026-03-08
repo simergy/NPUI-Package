@@ -260,12 +260,24 @@ using UnityEngine.Events;
     {
         public string Text;
         public int FontSize;
-
-        public LabelData(string text, int fontSize = -1)
+        public Color TextColor;
+        public Color BackgroundColor = Color.clear;
+        
+        public LabelData(string text, int fontSize = -1, Color textColor = default, Color backgroundColor = default)
         {
             Text = text;
             FontSize = fontSize;
+            TextColor = textColor;
+            if (backgroundColor != default)
+            {
+                BackgroundColor = backgroundColor;
+            }
+            if (textColor == default)
+            {
+                TextColor = Color.white;
+            }
         }
+
 
         public override NP_UIElements GetUIElement()
         {

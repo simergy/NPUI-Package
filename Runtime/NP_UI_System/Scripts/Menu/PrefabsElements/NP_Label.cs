@@ -72,6 +72,11 @@ public class NP_Label : NP_UIElements, ITextableElement
         }
     }
 
+    public void SetFaceColor(Color color)
+    {
+        labelTextComponent.faceColor = color;
+    }
+
     public void SetSize(int labelDataFontSize)
     {
         if (labelDataFontSize > -1)

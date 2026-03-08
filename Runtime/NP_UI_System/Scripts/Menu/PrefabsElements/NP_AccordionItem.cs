@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine.Events;
 
 /// <summary>
@@ -45,7 +46,7 @@ public class NP_AccordionItem : NP_UIElements, ITextableElement, IClickableEleme
     private List<AccordionData> accordionDataList;
     private AccordionData accordionDataParent;
     private RectTransform _headerRectTransform;
-    private GridLayoutGroup _itemContentGrid;
+    private VerticalLayoutGroup _itemContentVertical;
     private Image _headerImage, _contentImage;
     private NP_Accordion _accordionContainer;
     private Button arrowIconButton;
@@ -104,7 +105,7 @@ public class NP_AccordionItem : NP_UIElements, ITextableElement, IClickableEleme
 
     private void FillFields()
     {
-        _itemContentGrid = itemContent.GetComponent<GridLayoutGroup>();
+        _itemContentVertical = itemContent.GetComponent<VerticalLayoutGroup>();
         _headerRectTransform = header.GetComponent<RectTransform>();
         _headerImage = header.GetComponent<Image>();
         _contentImage = itemContent.GetComponent<Image>();
@@ -207,10 +208,40 @@ public class NP_AccordionItem : NP_UIElements, ITextableElement, IClickableEleme
     {
         itemContent.SetParent(transform.parent);
         itemContent.SetSiblingIndex(transform.GetSiblingIndex()+1);
-        GridLayoutGroup gridLayoutGroup = _itemContentGrid;
+        VerticalLayoutGroup gridLayoutGroup = _itemContentVertical;
         gridLayoutGroup.padding.left = ((int)OffsetX-5)* level;
     }
+    
+    private void SetupExpandingLabel(GameObject textObj, float maxWidth)
+    {
+        RectTransform rect = textObj.GetComponent<RectTransform>();
+        TextMeshProUGUI tmp = textObj.GetComponent<TextMeshProUGUI>();
+        ContentSizeFitter fitter = textObj.GetComponent<ContentSizeFitter>();
+        LayoutElement layoutElement = textObj.GetComponent<LayoutElement>();
 
+        if (fitter == null) fitter = textObj.AddComponent<ContentSizeFitter>();
+
+        // 1. Fix the Width issue: set Horizontal to Unconstrained
+        // This prevents the negative width bug by letting us define the boundary.
+        fitter.horizontalFit = ContentSizeFitter.FitMode.Unconstrained;
+        rect.sizeDelta = new Vector2(maxWidth, rect.sizeDelta.y);
+
+        // 2. Set Vertical to Preferred: this makes the panel grow downwards
+        fitter.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
+
+        // 3. Configure TMP for wrapping
+        if (tmp != null)
+        {
+            tmp.enableWordWrapping = true;
+            tmp.overflowMode = TextOverflowModes.Overflow;
+        }
+
+        layoutElement.preferredHeight = -1;
+        layoutElement.flexibleHeight = 1;
+
+        // 4. Force immediate update to snap the UI into place
+        LayoutRebuilder.ForceRebuildLayoutImmediate(rect);
+    }
 
     private void UpdateColor()
     {
@@ -275,7 +306,7 @@ public class NP_AccordionItem : NP_UIElements, ITextableElement, IClickableEleme
         }
         foreach (GenericUIData dataElement in dataElementsList)
         {
-            CreateElement(dataElement);
+            dataElement.SetValue(CreateElement(dataElement));
         }
     }
     private void AddElementLayoutGroup(NP_UIElements npElement)
@@ -286,8 +317,8 @@ public class NP_AccordionItem : NP_UIElements, ITextableElement, IClickableEleme
         }
 
         LayoutElement layoutElement = npElement.gameObject.AddComponent<LayoutElement>();
-        layoutElement.preferredHeight = 30;
-        layoutElement.preferredWidth = 150;
+        layoutElement.preferredHeight = 45;
+        layoutElement.preferredWidth = 250;
     }
 
     private void AddContentSizeFitterToElement(NP_UIElements npElement)
@@ -473,10 +504,14 @@ public class NP_AccordionItem : NP_UIElements, ITextableElement, IClickableEleme
         npElement.transform.SetParent(itemContent, false);
         AddContentSizeFitterToElement(npElement);
         AddElementLayoutGroup(npElement);
+        if (npElement is NP_Label)
+        {
+            SetupExpandingLabel(npElement.gameObject, 500);
+            itemContent.GetComponent<Image>().color = ((LabelData)dataElement).BackgroundColor;
+            npElement.GetComponent<TextMeshProUGUI>().ForceMeshUpdate();
+        }
         return npElement;
     }
-
- 
 
     /// <summary>
     /// Gets the grid layout group of the content panel.

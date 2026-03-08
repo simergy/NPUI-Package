@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using DA_Assets.Extensions;
 using NP_UI;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UIElements;
@@ -107,12 +108,13 @@ public class NP_MenuDesignData : Singleton<NP_MenuDesignData>
     public NP_Label CreateLabel(GenericUIData uiData)
     {
         NP_Label npLable = Instantiate(_npLable, Vector3.zero, Quaternion.identity);
-        LabelData labelData = uiData as LabelData;
-        if (labelData != null)
+        if (uiData is LabelData labelData)
         {
             npLable.SetText(labelData.Text);
             // Assuming SetSize sets font size or dimensions
             npLable.SetSize(labelData.FontSize); 
+            npLable.SetTextColor(labelData.TextColor);
+            npLable.SetFaceColor(Color.white);
         }
         return npLable;
     }
@@ -312,6 +314,7 @@ public class NP_MenuDesignData : Singleton<NP_MenuDesignData>
         {
             npUIElements.ID = uiData.ID;
         }
+        
         return npUIElements;
     }
 

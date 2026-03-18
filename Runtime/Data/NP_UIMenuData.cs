@@ -398,8 +398,8 @@ using UnityEngine.Events;
             Text = text;
             NpMenuData = null;
             ClickAction = null;
-            AccordionChildren = accordionChildren;
-            UiElementsData = uiElementsData;
+            AccordionChildren = accordionChildren ?? new List<AccordionData>();
+            UiElementsData = uiElementsData ?? new List<GenericUIData>();
             PivotScaling = pivotScaling;
         }
         
@@ -408,8 +408,8 @@ using UnityEngine.Events;
             Text = text;
             NpMenuData = null;
             ClickAction = null;
-            AccordionChildren = null;
-            UiElementsData = uiElementsData;
+            AccordionChildren = new List<AccordionData>();
+            UiElementsData = uiElementsData ?? new List<GenericUIData>();
             PivotScaling = pivotScaling;
         }
         
@@ -418,8 +418,8 @@ using UnityEngine.Events;
             Text = text;
             NpMenuData = npMenuData;
             ClickAction = onClick;
-            AccordionChildren = accordionChildren;
-            UiElementsData = uiElementsData;
+            AccordionChildren = accordionChildren ?? new List<AccordionData>();
+            UiElementsData = uiElementsData ?? new List<GenericUIData>();
             PivotScaling = new Vector2(0,1);
         }
         
@@ -428,8 +428,8 @@ using UnityEngine.Events;
             Text = text;
             NpMenuData = null;
             ClickAction = null;
-            AccordionChildren = null;
-            UiElementsData = null;
+            AccordionChildren = new List<AccordionData>();
+            UiElementsData = new List<GenericUIData>();
             PivotScaling = new Vector2(0,1);
         }
         

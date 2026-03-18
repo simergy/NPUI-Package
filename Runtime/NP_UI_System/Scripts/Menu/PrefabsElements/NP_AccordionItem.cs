@@ -188,13 +188,13 @@ public class NP_AccordionItem : NP_UIElements, ITextableElement, IClickableEleme
         _accordionContainer.RebuildLayout();
     }
 
-    public void ToggleElementsAppearance()
+    public void ToggleElementsAppearance(bool activate)
     {
         if (itemContent.childCount == 0)
         {
             return;
         }
-        itemContent.gameObject.SetActive(!itemContent.gameObject.activeSelf);
+        itemContent.gameObject.SetActive(activate);
         if (itemContent.parent == contentRawParent)
         {
             PositionItemContent();
@@ -202,6 +202,11 @@ public class NP_AccordionItem : NP_UIElements, ITextableElement, IClickableEleme
 
         _accordionContainer.RebuildLayout();
         LayoutRebuilder.ForceRebuildLayoutImmediate(_headerRectTransform);
+    }
+    
+    public void ToggleElementsAppearance()
+    {
+        ToggleElementsAppearance(!itemContent.gameObject.activeSelf);
     }
 
     private void PositionItemContent()

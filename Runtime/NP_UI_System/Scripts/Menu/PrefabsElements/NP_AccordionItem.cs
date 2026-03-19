@@ -172,6 +172,11 @@ public class NP_AccordionItem : NP_UIElements, ITextableElement, IClickableEleme
     /// </summary>
     public void Toggle()
     {
+        Toggle(!isExpanded);
+    }
+
+    public void Toggle(bool activate)
+    {
         if (childAccordions.Count == 0)
         {
             UpdateColor();
@@ -179,8 +184,8 @@ public class NP_AccordionItem : NP_UIElements, ITextableElement, IClickableEleme
             _accordionContainer.RebuildLayout();
             return;
         }
-        
-        isExpanded = !isExpanded;
+
+        isExpanded = activate;
         UpdateChildrenVisibility();
         UpdateArrowRotation();
         UpdateColor();

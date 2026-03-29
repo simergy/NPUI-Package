@@ -179,7 +179,6 @@ public class NP_AccordionItem : NP_UIElements, ITextableElement, IClickableEleme
     {
         if (childAccordions.Count == 0)
         {
-            UpdateColor();
             LayoutRebuilder.ForceRebuildLayoutImmediate(_headerRectTransform);
             _accordionContainer.RebuildLayout();
             return;
@@ -188,7 +187,6 @@ public class NP_AccordionItem : NP_UIElements, ITextableElement, IClickableEleme
         isExpanded = activate;
         UpdateChildrenVisibility();
         UpdateArrowRotation();
-        UpdateColor();
         LayoutRebuilder.ForceRebuildLayoutImmediate(_headerRectTransform);
         _accordionContainer.RebuildLayout();
     }
@@ -251,14 +249,6 @@ public class NP_AccordionItem : NP_UIElements, ITextableElement, IClickableEleme
 
         // 4. Force immediate update to snap the UI into place
         LayoutRebuilder.ForceRebuildLayoutImmediate(rect);
-    }
-
-    private void UpdateColor()
-    {
-        if (parentAccordion != null)
-        {
-            SetBackgroundColor(parentAccordion.background.color);
-        }
     }
 
     private void UpdateChildrenVisibility()

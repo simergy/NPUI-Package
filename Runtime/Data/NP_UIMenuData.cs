@@ -260,12 +260,24 @@ using UnityEngine.Events;
     {
         public string Text;
         public int FontSize;
-
-        public LabelData(string text, int fontSize = -1)
+        public Color TextColor;
+        public Color BackgroundColor = Color.clear;
+        
+        public LabelData(string text, int fontSize = -1, Color textColor = default, Color backgroundColor = default)
         {
             Text = text;
             FontSize = fontSize;
+            TextColor = textColor;
+            if (backgroundColor != default)
+            {
+                BackgroundColor = backgroundColor;
+            }
+            if (textColor == default)
+            {
+                TextColor = Color.white;
+            }
         }
+
 
         public override NP_UIElements GetUIElement()
         {
@@ -386,8 +398,8 @@ using UnityEngine.Events;
             Text = text;
             NpMenuData = null;
             ClickAction = null;
-            AccordionChildren = accordionChildren;
-            UiElementsData = uiElementsData;
+            AccordionChildren = accordionChildren ?? new List<AccordionData>();
+            UiElementsData = uiElementsData ?? new List<GenericUIData>();
             PivotScaling = pivotScaling;
         }
         
@@ -396,8 +408,8 @@ using UnityEngine.Events;
             Text = text;
             NpMenuData = null;
             ClickAction = null;
-            AccordionChildren = null;
-            UiElementsData = uiElementsData;
+            AccordionChildren = new List<AccordionData>();
+            UiElementsData = uiElementsData ?? new List<GenericUIData>();
             PivotScaling = pivotScaling;
         }
         
@@ -406,8 +418,8 @@ using UnityEngine.Events;
             Text = text;
             NpMenuData = npMenuData;
             ClickAction = onClick;
-            AccordionChildren = accordionChildren;
-            UiElementsData = uiElementsData;
+            AccordionChildren = accordionChildren ?? new List<AccordionData>();
+            UiElementsData = uiElementsData ?? new List<GenericUIData>();
             PivotScaling = new Vector2(0,1);
         }
         
@@ -416,8 +428,8 @@ using UnityEngine.Events;
             Text = text;
             NpMenuData = null;
             ClickAction = null;
-            AccordionChildren = null;
-            UiElementsData = null;
+            AccordionChildren = new List<AccordionData>();
+            UiElementsData = new List<GenericUIData>();
             PivotScaling = new Vector2(0,1);
         }
         

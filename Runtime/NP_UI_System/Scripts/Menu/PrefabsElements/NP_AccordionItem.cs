@@ -40,6 +40,9 @@ public class NP_AccordionItem : NP_UIElements, ITextableElement, IClickableEleme
     private static int Index = 0;
     private float scalarFontNormalizer = 0.8f;
     private const float OffsetX = 30;
+    private const float DefaultPreferredHeight = 45;
+    private const float DefaultPreferredWidth = 250;
+    private const float ScalarNormalizer = 0.55f;
 
     private bool isExpanded;
     private Transform parentTransform;
@@ -317,8 +320,8 @@ public class NP_AccordionItem : NP_UIElements, ITextableElement, IClickableEleme
         }
 
         LayoutElement layoutElement = npElement.gameObject.AddComponent<LayoutElement>();
-        layoutElement.preferredHeight = 45;
-        layoutElement.preferredWidth = 250;
+        layoutElement.preferredHeight = DefaultPreferredHeight;
+        layoutElement.preferredWidth = DefaultPreferredWidth;
     }
 
     private void AddContentSizeFitterToElement(NP_UIElements npElement)
@@ -587,7 +590,7 @@ public class NP_AccordionItem : NP_UIElements, ITextableElement, IClickableEleme
         {
             RectTransform.Axis vertical = RectTransform.Axis.Vertical;
             RectTransform.Axis horizontal = RectTransform.Axis.Horizontal;
-            float normalizedScalar = scalar * 0.55f;
+            float normalizedScalar = scalar * ScalarNormalizer;
             float newSizeDeltaY = arrowIconRectTransform.sizeDelta.y * normalizedScalar;
             float newSizeDeltaX = arrowIconRectTransform.sizeDelta.x * normalizedScalar;
             
